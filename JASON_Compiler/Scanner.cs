@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 public enum Token_Class
@@ -133,32 +134,67 @@ namespace TINY_Compiler
             Token Tok = new Token();
             Tok.lex = Lex;
             //Is it a reserved word?
-            
-
-            //Is it an identifier?
-            
-
-            //Is it a Constant?
-
+            if (ReservedWords.ContainsKey(Lex))
+            {
+                TC = ReservedWords[Lex];
+                Tok.token_type = TC;
+                Tokens.Add(Tok);
+            }
             //Is it an operator?
+            else if (Operators.ContainsKey(Lex))
+            {
+                TC  = Operators[Lex];
+                Tok.token_type = TC;
+                Tokens.Add(Tok);
+
+            }
+            //Is it an identifier?
+            if (isIdentifier(Lex))
+            {
+                TC = Token_Class.Idenifier;
+                Tok.token_type = TC;
+                Tokens.Add(Tok);
+            }
+            //Is it a Constant?
+            else if (isConstant(Lex))
+            {
+                TC = Token_Class.Constant;
+                Tok.token_type = TC;
+                Tokens.Add(Tok);
+            }
+            //Is it a String?
 
             //Is it an undefined?
+            else
+            {
+                Errors.Error_List.Add(Lex);
+            }
         }
 
-    
+
 
         bool isIdentifier(string lex)
         {
-            bool isValid=true;
+            bool isValid = true;
             // Check if the lex is an identifier or not.
-            
+            //
+            var pattern = new Regex("^[a-zA-Z]([a-zA-Z0-9])*$");
+            if (!pattern.IsMatch(lex))
+            {
+                isValid = false;
+            }
+
             return isValid;
         }
         bool isConstant(string lex)
         {
             bool isValid = true;
             // Check if the lex is a constant (Number) or not.
-
+            var pattern = new Regex("^[0-9]+(.[0-9]+)?$");
+            if (!pattern.IsMatch(lex))
+            {
+                isValid = false;
+            }
             return isValid;
         }
     }
