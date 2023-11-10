@@ -22,7 +22,8 @@ public enum Token_Class
     //
     Dot, LParanthesis, RParanthesis,Comma,
     //
-    Idenifier, Number
+
+    Idenifier, Number, String
 }
 
 
