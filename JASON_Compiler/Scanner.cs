@@ -22,7 +22,7 @@ public enum Token_Class
     //
     Dot, LParanthesis, RParanthesis,Comma,
     //
-    Idenifier, Constant
+    Idenifier, Number
 }
 
 
@@ -192,10 +192,10 @@ namespace TINY_Compiler
                     Tok.token_type = TC;
                     Tokens.Add(Tok);
                 }
-                //Is it a Constant?
-                else if (isConstant(Lex))
+                //Is it a Number?
+                else if (isNumber(Lex))
                 {
-                    TC = Token_Class.Constant;
+                    TC = Token_Class.Number;
                     Tok.token_type = TC;
                     Tokens.Add(Tok);
                 }
@@ -223,10 +223,10 @@ namespace TINY_Compiler
 
                 return isValid;
             }
-            bool isConstant(string lex)
+            bool isNumber(string lex)
             {
                 bool isValid = true;
-                // Check if the lex is a constant (Number) or not.
+                // Check if the lex is a Number (Number) or not.
                 var pattern = new Regex("^[0-9]+(.[0-9]+)?$");
                 if (!pattern.IsMatch(lex))
                 {
