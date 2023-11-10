@@ -24,6 +24,14 @@ public enum Token_Class
     //
     Idenifier, Constant
 }
+
+
+
+
+
+
+
+
 namespace TINY_Compiler
 {
 
@@ -93,7 +101,6 @@ namespace TINY_Compiler
 
 
 
-
         }
 
         public void StartScanning(string SourceCode)
@@ -122,25 +129,40 @@ namespace TINY_Compiler
                             CurrentChar = SourceCode[j];
 
                         }
-                        FindTokenClass(CurrentLexeme);
-                        i = j;
+
 
                     }
-
-                    else if (CurrentChar >= '0' && CurrentChar <= '9')
-                    {
-
-                    }
-                    else if (CurrentChar == '{')
-                    {
-
-                    }
-                    else
-                    {
-
-                    }
+                    FindTokenClass(CurrentLexeme);
+                    i = j;
                 }
+  
+                else if (CurrentChar >= '0' && CurrentChar <= '9')
+                {
+                    j++;
+                    if (j < SourceCode.Length)
+                    {
+                        CurrentChar = SourceCode[j];
+                        while (char.IsDigit(CurrentChar)||CurrentChar=='.')
+                        {
+                            CurrentLexeme += CurrentChar.ToString();
+                            j++;
+                            if (j >= SourceCode.Length)
+                                break;
+                            CurrentChar = SourceCode[j];
 
+                        }
+
+
+
+                    }
+                    FindTokenClass(CurrentLexeme);
+                    i = j;
+                }
+                else
+                {
+                    FindTokenClass(CurrentLexeme);
+
+                }
                 TINY_Compiler.TokenStream = Tokens;
             }
             void FindTokenClass(string Lex)
