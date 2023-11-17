@@ -5,6 +5,10 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
+/*
+ 
+ 
+ */
 public enum Token_Class
 { //reserved words 
     INTEGER,FLOAT, STRING ,READ , 
@@ -121,7 +125,7 @@ namespace TINY_Compiler
                     if (j < SourceCode.Length)
                     {
                         CurrentChar = SourceCode[j];
-                        while (char.IsLetter(CurrentChar) || char.IsDigit(CurrentChar))
+                        while (char.IsLetter(CurrentChar) || char.IsDigit(CurrentChar) )
                         {
                             CurrentLexeme += CurrentChar.ToString();
                             j++;
@@ -137,7 +141,7 @@ namespace TINY_Compiler
                     i = j;
                 }
   
-                else if (CurrentChar >= '0' && CurrentChar <= '9')
+                else if ((CurrentChar >= '0' && CurrentChar <= '9') )
                 {
                     j++;
                     if (j < SourceCode.Length)
@@ -152,13 +156,34 @@ namespace TINY_Compiler
                             CurrentChar = SourceCode[j];
 
                         }
-
-
-
                     }
                     FindTokenClass(CurrentLexeme);
                     i = j;
                 }
+                 else if (CurrentChar == '\"')
+                {
+                    j++;
+                    if (j < SourceCode.Length)
+                    {
+                        CurrentChar = SourceCode[j];
+                        while (true)
+                        {
+                            if(CurrentChar == '\"')
+                            {
+                                CurrentLexeme += CurrentChar.ToString();
+                                break;
+                            }
+                            CurrentLexeme += CurrentChar.ToString();
+                            j++;
+                            if (j >= SourceCode.Length)
+                                break;
+                            CurrentChar = SourceCode[j];
+
+                        }
+                    }
+                    FindTokenClass(CurrentLexeme);
+                    i = j;
+                 }
                 else
                 {
                     FindTokenClass(CurrentLexeme);
@@ -201,7 +226,12 @@ namespace TINY_Compiler
                     Tokens.Add(Tok);
                 }
                 //Is it a String?
-
+                else if (isString(Lex))
+                {
+                    TC = Token_Class.String;
+                    Tok.token_type = TC;
+                    Tokens.Add(Tok);
+                }
                 //Is it an undefined?
                 else
                 {
@@ -224,6 +254,20 @@ namespace TINY_Compiler
 
                 return isValid;
             }
+
+            bool isString(string lex)
+            {
+                bool isValid = true;
+                // Check if the lex is an identifier or not.
+                //
+                var pattern = new Regex("^\".*\"$");
+                if (!pattern.IsMatch(lex))
+                {
+                    isValid = false;
+                }
+                return isValid;
+            }
+
             bool isNumber(string lex)
             {
                 bool isValid = true;
