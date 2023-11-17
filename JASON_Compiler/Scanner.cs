@@ -101,7 +101,8 @@ namespace TINY_Compiler
             Operators.Add(",", Token_Class.Comma);
             Operators.Add("(", Token_Class.LParanthesis);
             Operators.Add(")", Token_Class.RParanthesis);
-
+            Operators.Add("{", Token_Class.LParanthesis);
+            Operators.Add("}", Token_Class.RParanthesis);
 
 
 
@@ -110,6 +111,9 @@ namespace TINY_Compiler
 
         public void StartScanning(string SourceCode)
         {
+            //Ignore the comments 
+            string pattern_comment = @"/\*(.*?)\*/";
+            SourceCode = Regex.Replace(SourceCode, pattern_comment, string.Empty);
             for (int i = 0; i < SourceCode.Length; i++)
             {
                 int j = i;
@@ -160,30 +164,15 @@ namespace TINY_Compiler
                     FindTokenClass(CurrentLexeme);
                     i = j;
                 }
-                 else if (CurrentChar == '\"')
+                else if(CurrentChar == ':')
                 {
-                    j++;
-                    if (j < SourceCode.Length)
+                    if (SourceCode[i+1]== '=') 
                     {
-                        CurrentChar = SourceCode[j];
-                        while (true)
-                        {
-                            if(CurrentChar == '\"')
-                            {
-                                CurrentLexeme += CurrentChar.ToString();
-                                break;
-                            }
-                            CurrentLexeme += CurrentChar.ToString();
-                            j++;
-                            if (j >= SourceCode.Length)
-                                break;
-                            CurrentChar = SourceCode[j];
-
-                        }
+                        CurrentLexeme += SourceCode[i + 1];
                     }
                     FindTokenClass(CurrentLexeme);
-                    i = j;
-                 }
+                    i = i + 1;
+                }
                 else
                 {
                     FindTokenClass(CurrentLexeme);
