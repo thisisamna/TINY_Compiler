@@ -151,9 +151,30 @@ namespace TINY_Compiler
                     if (j < SourceCode.Length)
                     {
                         CurrentChar = SourceCode[j];
-                        while (char.IsDigit(CurrentChar)||CurrentChar=='.')
+                        while (char.IsDigit(CurrentChar)||CurrentChar== '.' || char.IsLetter(CurrentChar))
                         {
                             CurrentLexeme += CurrentChar.ToString();
+                            j++;
+                            if (j >= SourceCode.Length)
+                                break;
+                            CurrentChar = SourceCode[j];
+
+                        }
+                    }
+                    FindTokenClass(CurrentLexeme);
+                    i = j;
+                }
+                else if ((CurrentChar =='\"'))
+                {
+                    j++;
+                    if (j < SourceCode.Length)
+                    {
+                        CurrentChar = SourceCode[j];
+                        while (true)
+                        {
+                            CurrentLexeme += CurrentChar.ToString();
+                            if (CurrentChar == '\"')
+                                break;
                             j++;
                             if (j >= SourceCode.Length)
                                 break;
@@ -173,6 +194,7 @@ namespace TINY_Compiler
                     FindTokenClass(CurrentLexeme);
                     i = i + 1;
                 }
+                
                 else
                 {
                     FindTokenClass(CurrentLexeme);
