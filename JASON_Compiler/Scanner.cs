@@ -13,7 +13,7 @@ public enum Token_Class
 { //reserved words 
     INTEGER,FLOAT, STRING ,READ , 
     WRITE , REPEAT , UNTIL , IF , 
-    ELSEIF , ELSE , THEN , RETURN ,END,
+    ELSEIF , ELSE , THEN , RETURN ,ENDL,
     //Arithmetic operator 
     PlusOp, MinusOp, MultiplyOp, DivideOp,
     //Assignment operator :=
@@ -24,7 +24,7 @@ public enum Token_Class
     //Boolean_Operator: AND operator “&&” and OR operator “||”
     AndOp, OrOp,
     //
-    Dot, LParanthesis, RParanthesis,Comma,
+    Dot, LParanthesis, RParanthesis,Comma, LBraket, RBracket,
     //
 
     Idenifier, Number, String
@@ -71,7 +71,7 @@ namespace TINY_Compiler
             ReservedWords.Add("else", Token_Class.ELSE);
             ReservedWords.Add("then", Token_Class.THEN);
             ReservedWords.Add("return", Token_Class.RETURN);
-            ReservedWords.Add("end", Token_Class.END);
+            ReservedWords.Add("endl", Token_Class.ENDL);
             /*
              arithmetic operation(+ | - | * | / )
              */
@@ -103,10 +103,8 @@ namespace TINY_Compiler
             Operators.Add(")", Token_Class.RParanthesis);
             Operators.Add("{", Token_Class.LParanthesis);
             Operators.Add("}", Token_Class.RParanthesis);
-
-
-
-
+            Operators.Add("[", Token_Class.LBraket);
+            Operators.Add("]", Token_Class.RBracket);
         }
 
         public void StartScanning(string SourceCode)
@@ -123,7 +121,7 @@ namespace TINY_Compiler
                 if (CurrentChar == ' ' || CurrentChar == '\r' || CurrentChar == '\n')
                     continue;
 
-                if (CurrentChar >= 'A' && CurrentChar <= 'z') //if you read a character
+                if ((CurrentChar >= 'A' && CurrentChar <= 'Z') || (CurrentChar >= 'a' && CurrentChar <= 'z')) //if you read a character
                 {
                     j++;
                     if (j < SourceCode.Length)
@@ -136,31 +134,29 @@ namespace TINY_Compiler
                             if (j >= SourceCode.Length)
                                 break;
                             CurrentChar = SourceCode[j];
-
                         }
-
-
                     }
+
                     FindTokenClass(CurrentLexeme);
                     i = j;
                 }
   
-                else if ((CurrentChar >= '0' && CurrentChar <= '9') )
+                else if ((CurrentChar >= '0' && CurrentChar <= '9')) 
                 {
                     j++;
                     if (j < SourceCode.Length)
                     {
                         CurrentChar = SourceCode[j];
-                        while (char.IsDigit(CurrentChar)||CurrentChar== '.' || char.IsLetter(CurrentChar))
+                        while (char.IsDigit(CurrentChar)|| CurrentChar== '.' || char.IsLetter(CurrentChar))
                         {
                             CurrentLexeme += CurrentChar.ToString();
                             j++;
                             if (j >= SourceCode.Length)
                                 break;
                             CurrentChar = SourceCode[j];
-
                         }
                     }
+
                     FindTokenClass(CurrentLexeme);
                     i = j;
                 }
@@ -198,8 +194,8 @@ namespace TINY_Compiler
                 else
                 {
                     FindTokenClass(CurrentLexeme);
-
                 }
+
                 TINY_Compiler.TokenStream = Tokens;
             }
             void FindTokenClass(string Lex)
@@ -220,7 +216,6 @@ namespace TINY_Compiler
                     TC = Operators[Lex];
                     Tok.token_type = TC;
                     Tokens.Add(Tok);
-
                 }
                 //Is it an identifier?
                 else if (isIdentifier(Lex))
