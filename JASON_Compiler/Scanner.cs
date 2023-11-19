@@ -194,7 +194,36 @@ namespace TINY_Compiler
                     FindTokenClass(CurrentLexeme);
                     i = i + 1;
                 }
-                
+
+                else if (CurrentChar == '&')
+                {
+                    if (SourceCode[i + 1] == '&')
+                    {
+                        CurrentLexeme += SourceCode[i + 1];
+                    }
+                    FindTokenClass(CurrentLexeme);
+                    i = i + 1;
+                }
+
+                else if (CurrentChar == '|')
+                {
+                    if (SourceCode[i + 1] == '|')
+                    {
+                        CurrentLexeme += SourceCode[i + 1];
+                    }
+                    FindTokenClass(CurrentLexeme);
+                    i = i + 1;
+                }
+                else if (CurrentChar == '<')
+                {
+                    if (SourceCode[i + 1] == '>')
+                    {
+                        CurrentLexeme += SourceCode[i + 1];
+                    }
+                    FindTokenClass(CurrentLexeme);
+                    i = i + 1;
+                }
+
                 else
                 {
                     FindTokenClass(CurrentLexeme);
