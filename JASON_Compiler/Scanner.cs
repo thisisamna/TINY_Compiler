@@ -124,7 +124,7 @@ namespace TINY_Compiler
                 if ((CurrentChar >= 'A' && CurrentChar <= 'Z') || (CurrentChar >= 'a' && CurrentChar <= 'z')) //if you read a character
                 {
                     j++;
-                    if (j < SourceCode.Length)
+                    if (j < SourceCode.Length) 
                     {
                         CurrentChar = SourceCode[j];
                         while (char.IsLetter(CurrentChar) || char.IsDigit(CurrentChar) )
@@ -138,7 +138,7 @@ namespace TINY_Compiler
                     }
 
                     FindTokenClass(CurrentLexeme);
-                    i = j;
+                    i = j-1;
                 }
   
                 else if ((CurrentChar >= '0' && CurrentChar <= '9')) 
@@ -158,7 +158,7 @@ namespace TINY_Compiler
                     }
 
                     FindTokenClass(CurrentLexeme);
-                    i = j;
+                    i = j-1;
                 }
                 else if ((CurrentChar =='\"'))
                 {
@@ -179,7 +179,7 @@ namespace TINY_Compiler
                         }
                     }
                     FindTokenClass(CurrentLexeme);
-                    i = j;
+                    i = j-1;
                 }
                 else if(CurrentChar == ':')
                 {
