@@ -24,7 +24,7 @@ public enum Token_Class
     //Boolean_Operator: AND operator “&&” and OR operator “||”
     AndOp, OrOp,
     //
-    Dot, LParanthesis, RParanthesis,Comma, LBraket, RBracket,
+    Dot, LParanthesis, RParanthesis,Comma,
     //
 
     Idenifier, Number, String
@@ -103,8 +103,6 @@ namespace TINY_Compiler
             Operators.Add(")", Token_Class.RParanthesis);
             Operators.Add("{", Token_Class.LParanthesis);
             Operators.Add("}", Token_Class.RParanthesis);
-            Operators.Add("[", Token_Class.LBraket);
-            Operators.Add("]", Token_Class.RBracket);
         }
 
         public void StartScanning(string SourceCode)
@@ -124,7 +122,7 @@ namespace TINY_Compiler
                 if ((CurrentChar >= 'A' && CurrentChar <= 'Z') || (CurrentChar >= 'a' && CurrentChar <= 'z')) //if you read a character
                 {
                     j++;
-                    if (j < SourceCode.Length) 
+                    if (j < SourceCode.Length)  //write "Iteration number [";
                     {
                         CurrentChar = SourceCode[j];
                         while (char.IsLetter(CurrentChar) || char.IsDigit(CurrentChar) )
@@ -179,7 +177,7 @@ namespace TINY_Compiler
                         }
                     }
                     FindTokenClass(CurrentLexeme);
-                    i = j-1;
+                    i = j;
                 }
                 else if(CurrentChar == ':')
                 {
