@@ -24,7 +24,7 @@ public enum Token_Class
     //Boolean_Operator: AND operator “&&” and OR operator “||”
     AndOp, OrOp,
     //
-    Dot, LParanthesis, RParanthesis,Comma,
+    Dot, LParanthesis, RParanthesis, LBrace, RBrace,Comma,
     //
 
     Idenifier, Number, String
@@ -101,8 +101,8 @@ namespace TINY_Compiler
             Operators.Add(",", Token_Class.Comma);
             Operators.Add("(", Token_Class.LParanthesis);
             Operators.Add(")", Token_Class.RParanthesis);
-            Operators.Add("{", Token_Class.LParanthesis);
-            Operators.Add("}", Token_Class.RParanthesis);
+            Operators.Add("{", Token_Class.LBrace);
+            Operators.Add("}", Token_Class.RBrace);
         }
 
         public void StartScanning(string SourceCode)
