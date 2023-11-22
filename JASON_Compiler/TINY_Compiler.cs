@@ -26,7 +26,7 @@ namespace TINY_Compiler
 
         static void SplitLexemes(string SourceCode)
         {
-            string[] Lexemes_arr=SourceCode.Split(' ');
+            string[] Lexemes_arr=SourceCode.Split("");
             for(int i=0; i< Lexemes_arr.Length; i++)
             {
                 if(Lexemes_arr[i].Contains("\r\n"))

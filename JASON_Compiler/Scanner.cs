@@ -16,7 +16,7 @@ public enum Token_Class
     ELSEIF , ELSE , THEN , RETURN ,ENDL,
     //Arithmetic operator 
     PlusOp, MinusOp, MultiplyOp, DivideOp,
-    //Assignment operator :=
+    //Assignment operator :=  and Semicolon ;
     AssignmentOp,
     Semicolon,
     //ConditionOperator (less than “<” | greater than “>” |is equal “=” | not equal “<>”)
@@ -77,6 +77,7 @@ namespace TINY_Compiler
              */
             Operators.Add("+", Token_Class.PlusOp);
             Operators.Add("-", Token_Class.MinusOp);
+            Operators.Add("–", Token_Class.MinusOp);
             Operators.Add("*", Token_Class.MultiplyOp);
             Operators.Add("/", Token_Class.DivideOp);
             /*
