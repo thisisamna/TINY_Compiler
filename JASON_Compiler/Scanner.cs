@@ -217,8 +217,15 @@ namespace TINY_Compiler
                     j++;
                     if (j < SourceCode.Length)
                     {
-    //BUG BUG BUG                    
+                        if (SourceCode[j] == '>')
+                        {
+
                             CurrentLexeme += SourceCode[j];
+                        }
+                        else
+                        {
+                            j--;
+                        }
                     }
                     FindTokenClass(CurrentLexeme);
                     i = j;
