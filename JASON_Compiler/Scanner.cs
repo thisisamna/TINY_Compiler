@@ -237,7 +237,6 @@ namespace TINY_Compiler
                     {
                         if (SourceCode[j] == '*')
                         {
-                            j++;
                             if (j < SourceCode.Length)
                             {
                                 CurrentChar = SourceCode[j];
