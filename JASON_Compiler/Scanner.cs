@@ -97,7 +97,7 @@ namespace TINY_Compiler
             Operators.Add("&&", Token_Class.AndOp);
             Operators.Add("||", Token_Class.OrOp);
             //
-            Operators.Add(".", Token_Class.Dot);
+            //Operators.Add(".", Token_Class.Dot);
             Operators.Add(",", Token_Class.Comma);
             Operators.Add("(", Token_Class.LParanthesis);
             Operators.Add(")", Token_Class.RParanthesis);
@@ -226,6 +226,35 @@ namespace TINY_Compiler
                         {
                             j--;
                         }
+                    }
+                    FindTokenClass(CurrentLexeme);
+                    i = j;
+                }
+                else if (CurrentChar == '/')
+                {
+                    j++;
+                    if (j < SourceCode.Length)
+                    {
+                        if (SourceCode[j] == '*')
+                        {
+                            j++;
+                            if (j < SourceCode.Length)
+                            {
+                                CurrentChar = SourceCode[j];
+                                while (true)
+                                {
+                                    CurrentLexeme += CurrentChar.ToString();
+                                    if (CurrentChar == '\"')
+                                        break;
+                                    j++;
+                                    if (j >= SourceCode.Length)
+                                        break;
+                                    CurrentChar = SourceCode[j];
+
+                                }
+                            }
+                        }
+
                     }
                     FindTokenClass(CurrentLexeme);
                     i = j;
