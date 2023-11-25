@@ -108,7 +108,7 @@ namespace TINY_Compiler
         public void StartScanning(string SourceCode)
         {
             //Ignore the comments 
-            string pattern_comment = @"^/\*((.|\n|\r)*?)\*/$";
+            string pattern_comment = @"/\*((.|\n|\r)*?)\*/";
             SourceCode = Regex.Replace(SourceCode, pattern_comment, string.Empty);
             for (int i = 0; i < SourceCode.Length; i++)
             {
