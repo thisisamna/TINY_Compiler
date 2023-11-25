@@ -181,41 +181,47 @@ namespace TINY_Compiler
                 }
                 else if(CurrentChar == ':')
                 {
-                    if (SourceCode[i+1]== '=') 
+                    j++;
+                    if (j < SourceCode.Length)
                     {
-                        CurrentLexeme += SourceCode[i + 1];
+                            CurrentLexeme += SourceCode[j];
                     }
                     FindTokenClass(CurrentLexeme);
-                    i = i + 1;
+                    i =j;
                 }
 
                 else if (CurrentChar == '&')
                 {
-                    if (SourceCode[i + 1] == '&')
-                    {
-                        CurrentLexeme += SourceCode[i + 1];
+                    j++;
+                    if (j < SourceCode.Length)
+                    { 
+                            CurrentLexeme += SourceCode[j];
+
                     }
                     FindTokenClass(CurrentLexeme);
-                    i = i + 1;
+                    i = j;
                 }
 
                 else if (CurrentChar == '|')
                 {
-                    if (SourceCode[i + 1] == '|')
-                    {
-                        CurrentLexeme += SourceCode[i + 1];
+                    j++;
+                    if (j < SourceCode.Length)
+                    {                    
+                            CurrentLexeme += SourceCode[j];
                     }
                     FindTokenClass(CurrentLexeme);
-                    i = i + 1;
+                    i = j;
                 }
                 else if (CurrentChar == '<')
                 {
-                    if (SourceCode[i + 1] == '>')
+                    j++;
+                    if (j < SourceCode.Length)
                     {
-                        CurrentLexeme += SourceCode[i + 1];
+    //BUG BUG BUG                    
+                            CurrentLexeme += SourceCode[j];
                     }
                     FindTokenClass(CurrentLexeme);
-                    i = i + 1;
+                    i = j;
                 }
 
                 else
