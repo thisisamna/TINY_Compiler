@@ -23,9 +23,9 @@ public enum Token_Class
     LessThanOp, GreaterThanOp, NotEqualOp, EqualOp,
     //Boolean_Operator: AND operator “&&” and OR operator “||”
     AndOp, OrOp,
-    //
+    //    Dot, LParanthesis, RParanthesis, LBrace, RBrace,Comma
     Dot, LParanthesis, RParanthesis, LBrace, RBrace,Comma,
-    //
+    //Idenifier, Number, String
 
     Idenifier, Number, String
 }
