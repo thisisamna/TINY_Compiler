@@ -10,9 +10,9 @@ using System.Windows.Forms;
 
 namespace TINY_Compiler
 {
-    public partial class Form1 : Form
+    public partial class GUI : Form
     {
-        public Form1()
+        public GUI()
         {
             InitializeComponent();
         }
@@ -67,6 +67,16 @@ namespace TINY_Compiler
         private void textBox2_TextChanged(object sender, EventArgs e)
         {
 
+        }
+
+        private void label2_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void Form1_Load(object sender, EventArgs e)
+        {
+            
         }
         /*  void PrintLexemes()
 {

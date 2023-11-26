@@ -201,7 +201,6 @@ namespace TINY_Compiler
                     FindTokenClass(CurrentLexeme);
                     i = j;
                 }
-
                 else if (CurrentChar == '|')
                 {
                     j++;
@@ -258,7 +257,6 @@ namespace TINY_Compiler
                     FindTokenClass(CurrentLexeme);
                     i = j;
                 }
-
                 else
                 {
                     FindTokenClass(CurrentLexeme);
@@ -266,6 +264,7 @@ namespace TINY_Compiler
 
                 TINY_Compiler.TokenStream = Tokens;
             }
+
             void FindTokenClass(string Lex)
             {
                 Token_Class TC;
@@ -313,8 +312,6 @@ namespace TINY_Compiler
                 }
             }
 
-
-
             bool isIdentifier(string lex)
             {
                 bool isValid = true;
@@ -332,7 +329,7 @@ namespace TINY_Compiler
             bool isString(string lex)
             {
                 bool isValid = true;
-                // Check if the lex is an identifier or not.
+                // Check if the lex is an String or not
                 //
                 var pattern = new Regex("^\".*\"$");
                 if (!pattern.IsMatch(lex))
