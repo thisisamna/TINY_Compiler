@@ -7,6 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement;
 
 namespace TINY_Compiler
 {
@@ -27,8 +28,8 @@ namespace TINY_Compiler
             string Code = textBox1.Text;
             TINY_Compiler.Start_Compiling(Code);
             PrintTokens();
-         //   PrintLexemes();
-
+            //   PrintLexemes();
+            treeView1.Nodes.Add(Parser.PrintParseTree(TINY_Compiler.treeroot));
             PrintErrors();
         }
         void PrintTokens()
@@ -62,6 +63,9 @@ namespace TINY_Compiler
             dataGridView1.Rows.Clear();
             textBox2.Clear();
             TINY_Compiler.TokenStream.Clear();
+            dataGridView1.Rows.Clear();
+            treeView1.Nodes.Clear();
+            Errors.Error_List.Clear();
         }
 
         private void textBox2_TextChanged(object sender, EventArgs e)
@@ -77,6 +81,11 @@ namespace TINY_Compiler
         private void Form1_Load(object sender, EventArgs e)
         {
             
+        }
+
+        private void treeView1_AfterSelect(object sender, TreeViewEventArgs e)
+        {
+
         }
         /*  void PrintLexemes()
 {

@@ -27,7 +27,7 @@ public enum Token_Class
     Dot, LParanthesis, RParanthesis, LBrace, RBrace,Comma,
     //
 
-    Idenifier, Number, String
+    Identifier, Number, String
 }
 
 
@@ -287,7 +287,7 @@ namespace TINY_Compiler
                 //Is it an identifier?
                 else if (isIdentifier(Lex))
                 {
-                    TC = Token_Class.Idenifier;
+                    TC = Token_Class.Identifier;
                     Tok.token_type = TC;
                     Tokens.Add(Tok);
                 }
