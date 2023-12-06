@@ -92,6 +92,109 @@ namespace TINY_Compiler
         {
             throw new NotImplementedException();
         }
+        private Node Cond()
+        {
+            //TODO: Task 4
+            throw new NotImplementedException();
+        }
+        private Node Statements()
+        {
+            throw new NotImplementedException();
+        }
+        private Node Cond_Stmt()
+        {
+            //Cond_Stmt -> cond cond_stmt2
+            Node cond_stmt = new Node("Cond_Stmt");
+            cond_stmt.Children.Add(Cond());
+            cond_stmt.Children.Add(Cond_Stmt2());
+            return cond_stmt;
+        }
 
+        private Node Cond_Stmt2()
+        {
+            //Cond_Stmt2 -> Bool_Cond Cond_Stmt2 | e
+            Node cond_stmt2 = new Node("cond_stmt2");
+            if (TokenStream[InputPointer].token_type==Token_Class.AndOp || TokenStream[InputPointer].token_type == Token_Class.OrOp)
+            {
+                cond_stmt2.Children.Add(Bool_Cond());
+                cond_stmt2.Children.Add(Cond_Stmt2());
+            }
+            else
+            {
+                return null;
+            }
+            return cond_stmt2;
+        }
+
+        private Node Bool_Cond()
+        {
+            //Bool_Cond -> Bool_Op Cond
+            Node bool_Cond = new Node("Bool_Cond");
+            bool_Cond.Children.Add(Bool_Op());
+            bool_Cond.Children.Add(Cond());
+            return bool_Cond;
+        }
+
+        private Node Bool_Op()
+        {
+            //Bool_Op -> && | "||"
+            Node bool_Op = new Node("Bool_Op");
+            bool_Op.Children.Add(match(Token_Class.AndOp));
+            bool_Op.Children.Add(match(Token_Class.OrOp));
+            return bool_Op;
+        }
+        private Node Rep_Stmt()
+        {
+            //Rep_Stmt  -> “repeat”  Statements “until”  Cond_Stmt
+            Node rep_Stmt = new Node("Rep_Stmt");
+            rep_Stmt.Children.Add(match(Token_Class.REPEAT));
+            rep_Stmt.Children.Add(Statements());
+            rep_Stmt.Children.Add(match(Token_Class.UNTIL));
+            rep_Stmt.Children.Add(Cond_Stmt());
+            return rep_Stmt;
+        }
+        private Node Function_Call()
+        {
+            //Fun_call -> Identifier “(“  args  “)”
+            Node function_Call = new Node("Function_Call");
+            function_Call.Children.Add(match(Token_Class.Identifier));
+            function_Call.Children.Add(match(Token_Class.LCurlyBrace));
+            function_Call.Children.Add(args());
+            function_Call.Children.Add(match(Token_Class.RCurlyBrace));
+            return function_Call;
+        }
+
+        private Node args()
+        {
+            //args -> Identifier  args2  |   𝜀
+            Node args_var = new Node("args");
+            if (TokenStream[InputPointer].token_type == Token_Class.Identifier)
+            {
+                args_var.Children.Add(match(Token_Class.Identifier));
+                args_var.Children.Add(arg2());
+            }
+            else
+            {
+                return null;
+            }
+            return args_var;
+        }
+
+        private Node arg2()
+        {
+            //args2 ->   “,”  Identifier  args2  |   𝜀
+            Node args2_var = new Node("args2");
+            if (TokenStream[InputPointer].token_type == Token_Class.Comma)
+            {
+                args2_var.Children.Add(match(Token_Class.Comma));
+                args2_var.Children.Add(match(Token_Class.Identifier));
+                args2_var.Children.Add(arg2());
+            }
+            else
+            {
+                return null;
+            }
+            return args2_var;
+        }
     }
 }
