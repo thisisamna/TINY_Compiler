@@ -101,6 +101,11 @@ namespace TINY_Compiler
         {
             throw new NotImplementedException();
         }
+
+        private Node Experssion()
+        {
+            throw new NotImplementedException();
+        }
         private Node Cond_Stmt()
         {
             //Cond_Stmt -> cond cond_stmt2
@@ -196,5 +201,18 @@ namespace TINY_Compiler
             }
             return args2_var;
         }
+        private Node Ass_Stmt()
+        {
+            //ass_stmt -> Identifier  “:=”  experssion
+            Node ass_stmt = new Node("Ass_Stmt");
+            if (TokenStream[InputPointer].token_type == Token_Class.Identifier)
+            {
+                ass_stmt.Children.Add(match(Token_Class.Identifier));
+                ass_stmt.Children.Add(match(Token_Class.AssignmentOp));
+                ass_stmt.Children.Add(Experssion());
+            }
+            return ass_stmt;
+        }
+
     }
 }
