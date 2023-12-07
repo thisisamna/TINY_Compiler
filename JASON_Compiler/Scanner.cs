@@ -26,7 +26,7 @@ public enum Token_Class
     //
     Dot, LParanthesis, RParanthesis, LCurlyBrace, RCurlyBrace,Comma,
     //
-
+    Main,
     Identifier, Number, String
 }
 
@@ -72,6 +72,7 @@ namespace TINY_Compiler
             ReservedWords.Add("then", Token_Class.THEN);
             ReservedWords.Add("return", Token_Class.RETURN);
             ReservedWords.Add("endl", Token_Class.ENDL);
+            ReservedWords.Add("main", Token_Class.Main);
             /*
              arithmetic operation(+ | - | * | / )
              */

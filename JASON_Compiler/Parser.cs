@@ -90,13 +90,80 @@ namespace TINY_Compiler
 
         private Node Main_Function()
         {
-            throw new NotImplementedException();
+            Node Main_Function_var = new Node("Main_Function");
+            Main_Function_var.Children.Add(Datatype());
+            Main_Function_var.Children.Add(match(Token_Class.Main));
+            Main_Function_var.Children.Add(match(Token_Class.LParanthesis));
+            Main_Function_var.Children.Add(match(Token_Class.RParanthesis));
+            Main_Function_var.Children.Add(Function_Body());
+            return Main_Function_var;
+
         }
         private Node Cond()
         {
             //TODO: Task 4
             throw new NotImplementedException();
         }
+
+
+        private Node Program()
+        {
+            Node Program_var = new Node("Program");
+            Program_var.Children.Add(Fun_stmts());
+            Program_var.Children.Add(Main_Function());
+            return Program_var;
+        }
+
+        private Node Fun_stmts()
+        {
+            Node Fun_stmts_var = new Node("Fun_stmts");
+            if (TokenStream[InputPointer].token_type == Token_Class.INTEGER|| TokenStream[InputPointer].token_type == Token_Class.FLOAT|| TokenStream[InputPointer].token_type == Token_Class.STRING)
+            {
+                Fun_stmts_var.Children.Add(Function_Statement());
+                Fun_stmts_var.Children.Add(Fun_stmts());
+
+            }
+            else
+            {
+                return null;
+
+            }
+            return Fun_stmts_var;
+        }
+        private Node Function_Statement()
+        {
+            //TODO: Task 4
+            throw new NotImplementedException();
+        }
+
+        private Node Datatype()
+        {
+            Node Datatype_var = new Node("Datatype");
+            if (TokenStream[InputPointer].token_type == Token_Class.INTEGER)
+            {
+                Datatype_var.Children.Add(match(Token_Class.INTEGER));
+                
+            }
+            else if (TokenStream[InputPointer].token_type == Token_Class.FLOAT)
+            {
+                Datatype_var.Children.Add(match(Token_Class.FLOAT));
+
+            }
+            else
+            {
+                Datatype_var.Children.Add(match(Token_Class.STRING));
+
+            }
+            return Datatype_var;
+
+        }
+
+        private Node Function_Body()
+        {
+            //TODO: Task 4
+            return null;
+        }
+
         private Node Statements()
         {
             throw new NotImplementedException();
@@ -179,6 +246,64 @@ namespace TINY_Compiler
             }
             return args_var;
         }
+
+
+        private Node Dcl_stmt()//Declaration_Statement
+        {
+            Node Dcl_stmt_var = new Node("Dcl_stmt");
+            Dcl_stmt_var.Children.Add(Datatype());
+            Dcl_stmt_var.Children.Add(Identifiers());
+            Dcl_stmt_var.Children.Add(match(Token_Class.Semicolon));
+            return Dcl_stmt_var;
+
+        }
+
+        private Node Identifiers()//Declaration_Statement non_terminal
+        {
+            Node Identifiers_var = new Node("Identifiers");
+            Identifiers_var.Children.Add(match(Token_Class.Identifier));
+            if (TokenStream[InputPointer].token_type == Token_Class.AssignmentOp)
+            {
+                Identifiers_var.Children.Add(match(Token_Class.AssignmentOp));
+                Identifiers_var.Children.Add(Iden2());
+
+            }
+            else
+            {
+                Identifiers_var.Children.Add(Iden2());
+
+            }
+
+            return Identifiers_var;
+
+        }
+
+
+        private Node Iden2()//Datatype
+        {
+            Node Iden2_var = new Node("Iden2");
+
+            if (TokenStream[InputPointer].token_type == Token_Class.Comma)
+            {
+                Iden2_var.Children.Add(match(Token_Class.Comma));
+                Iden2_var.Children.Add(Identifiers());
+
+            }
+            else
+            {
+                return null;
+
+            }
+            return Iden2_var;
+
+        }
+
+        //private Node Assignment_Statement()//Assignment_Statement 
+        //{
+        //    return null;
+
+
+        //}
 
         private Node arg2()
         {
