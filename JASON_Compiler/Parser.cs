@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Security.Cryptography;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -166,6 +168,34 @@ namespace TINY_Compiler
 
         private Node Statements()
         {
+            //i'm not really sure
+            //Statements → ε Statements’
+
+            Node statements = new Node("statements");
+            statements.Children.Add(Statements2());
+            return statements;
+
+        }
+
+        private Node Statements2()
+        {
+            //Statements’ → Statement Statements’ | ε
+            Node statements2 = new Node("statements2");
+            statements2.Children.Add(Statement());
+            Statements2(); //recursion
+            return statements2;
+
+        }
+
+        private Node Statement()
+        {
+            //me
+            return null;
+
+        }
+
+        private Node Experssion()
+        {
             throw new NotImplementedException();
         }
         private Node Cond_Stmt()
@@ -321,5 +351,113 @@ namespace TINY_Compiler
             }
             return args2_var;
         }
+        private Node Ass_Stmt()
+        {
+            //ass_stmt -> Identifier  “:=”  experssion
+            Node ass_stmt = new Node("Ass_Stmt");
+            if (TokenStream[InputPointer].token_type == Token_Class.Identifier)
+            {
+                ass_stmt.Children.Add(match(Token_Class.Identifier));
+                ass_stmt.Children.Add(match(Token_Class.AssignmentOp));
+                ass_stmt.Children.Add(Experssion());
+            }
+            return ass_stmt;
+        }
+
+
+        private Node Parameter()
+        {
+            //Parameter → Datatype Identifier
+            Node parameter = new Node("parameter");
+
+            parameter.Children.Add(DataType());
+            if (TokenStream[InputPointer].token_type == Token_Class.Identifier)
+            {
+                parameter.Children.Add(match(Token_Class.Identifier));
+            }
+            
+            return parameter;
+        }
+
+        private Node Function_Statement()
+        {
+            //Function_Statement → Function_Decleration Function_Body
+            Node function_statement = new Node("function_statement");
+
+            function_statement.Children.Add(Function_Decleration());
+            function_statement.Children.Add(Function_Body());
+            return function_statement;
+        }
+
+        private Node Function_Decleration()
+        {
+            //Function_Declaration → Datatype Identifier (Parameters)
+
+            Node function_declaration = new Node("function_declaration");
+
+            function_declaration.Children.Add(DataType());
+            if (TokenStream[InputPointer].token_type == Token_Class.Identifier)
+            {
+                function_declaration.Children.Add(match(Token_Class.Identifier));
+                function_declaration.Children.Add(match(Token_Class.LParanthesis));
+                function_declaration.Children.Add(Parameters());
+                function_declaration.Children.Add(match(Token_Class.RParanthesis));
+
+            }
+            function_declaration.Children.Add(Function_Body());
+            return function_declaration;
+        }
+
+        private Node Parameters()
+        {
+            //Parameters → ε Parameters'
+            Node parameters = new Node("parameters");
+            parameters.Children.Add(Parameters2());
+            return parameters;
+        }
+
+        private Node Parameters2()
+        {
+            //Parameters’ → Parameter Parameters’ | ε
+
+            Node parameters2 = new Node("parameters2");
+
+            parameters2.Children.Add(Parameter());
+            Parameters2(); //recursion
+            return parameters2; //?
+        }
+
+        private Node Function_Body()
+        {
+            //Function_Body → {Statements Retrun_Statment;}
+
+            Node function_body = new Node("function_body");
+            if (TokenStream[InputPointer].token_type == Token_Class.LCurlyBrace)
+            {
+                function_body.Children.Add(match(Token_Class.LCurlyBrace));
+                function_body.Children.Add(Statements());
+                function_body.Children.Add(Return_Statement());
+                function_body.Children.Add(match(Token_Class.Semicolon));
+                function_body.Children.Add(match(Token_Class.RCurlyBrace));
+                return function_body; 
+            }
+            return null;
+        }
+
+        private Node DataType()
+        {
+
+            return null;
+        }
+
+        private Node Return_Statement()
+        {
+
+            return null;
+        }
+
+
+
+
     }
 }
