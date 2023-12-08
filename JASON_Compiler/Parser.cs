@@ -132,12 +132,7 @@ namespace TINY_Compiler
             }
             return Fun_stmts_var;
         }
-        private Node Function_Statement()
-        {
-            //TODO: Task 4
-            throw new NotImplementedException();
-        }
-
+    
         private Node Datatype()
         {
             Node Datatype_var = new Node("Datatype");
@@ -160,13 +155,9 @@ namespace TINY_Compiler
 
         }
 
-        private Node Function_Body()
-        {
-            //TODO: Task 4
-            return null;
-        }
+ 
 
-        private Node Statements()
+        private Node Statements() //statements
         {
             //i'm not really sure
             //Statements → ε Statements’
@@ -328,12 +319,6 @@ namespace TINY_Compiler
 
         }
 
-        //private Node Assignment_Statement()//Assignment_Statement 
-        //{
-        //    return null;
-
-
-        //}
 
         private Node arg2()
         {
@@ -370,7 +355,7 @@ namespace TINY_Compiler
             //Parameter → Datatype Identifier
             Node parameter = new Node("parameter");
 
-            parameter.Children.Add(DataType());
+            parameter.Children.Add(Datatype());
             if (TokenStream[InputPointer].token_type == Token_Class.Identifier)
             {
                 parameter.Children.Add(match(Token_Class.Identifier));
@@ -379,7 +364,7 @@ namespace TINY_Compiler
             return parameter;
         }
 
-        private Node Function_Statement()
+        private Node Function_Statement() //function statement
         {
             //Function_Statement → Function_Decleration Function_Body
             Node function_statement = new Node("function_statement");
@@ -389,13 +374,13 @@ namespace TINY_Compiler
             return function_statement;
         }
 
-        private Node Function_Decleration()
+        private Node Function_Decleration() //function decleration
         {
             //Function_Declaration → Datatype Identifier (Parameters)
 
             Node function_declaration = new Node("function_declaration");
 
-            function_declaration.Children.Add(DataType());
+            function_declaration.Children.Add(Datatype());
             if (TokenStream[InputPointer].token_type == Token_Class.Identifier)
             {
                 function_declaration.Children.Add(match(Token_Class.Identifier));
@@ -407,8 +392,8 @@ namespace TINY_Compiler
             function_declaration.Children.Add(Function_Body());
             return function_declaration;
         }
-
-        private Node Parameters()
+        //par
+        private Node Parameters() //parameters
         {
             //Parameters → ε Parameters'
             Node parameters = new Node("parameters");
@@ -427,7 +412,8 @@ namespace TINY_Compiler
             return parameters2; //?
         }
 
-        private Node Function_Body()
+        
+        private Node Function_Body() //function body
         {
             //Function_Body → {Statements Retrun_Statment;}
 
@@ -441,12 +427,6 @@ namespace TINY_Compiler
                 function_body.Children.Add(match(Token_Class.RCurlyBrace));
                 return function_body; 
             }
-            return null;
-        }
-
-        private Node DataType()
-        {
-
             return null;
         }
 
