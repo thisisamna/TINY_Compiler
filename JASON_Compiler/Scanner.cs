@@ -23,9 +23,9 @@ public enum Token_Class
     LessThanOp, GreaterThanOp, NotEqualOp, EqualOp,
     //Boolean_Operator: AND operator “&&” and OR operator “||”
     AndOp, OrOp,
-    //    Dot, LParanthesis, RParanthesis, LBrace, RBrace,Comma
+    //
     Dot, LParanthesis, RParanthesis, LBrace, RBrace,Comma,
-    //Idenifier, Number, String
+    //
 
     Idenifier, Number, String
 }
@@ -72,6 +72,7 @@ namespace TINY_Compiler
             ReservedWords.Add("then", Token_Class.THEN);
             ReservedWords.Add("return", Token_Class.RETURN);
             ReservedWords.Add("endl", Token_Class.ENDL);
+            ReservedWords.Add("main", Token_Class.Main);
             /*
              arithmetic operation(+ | - | * | / )
              */
@@ -102,8 +103,8 @@ namespace TINY_Compiler
             Operators.Add(",", Token_Class.Comma);
             Operators.Add("(", Token_Class.LParanthesis);
             Operators.Add(")", Token_Class.RParanthesis);
-            Operators.Add("{", Token_Class.LBrace);
-            Operators.Add("}", Token_Class.RBrace);
+            Operators.Add("{", Token_Class.LCurlyBrace);
+            Operators.Add("}", Token_Class.RCurlyBrace);
         }
 
         public void StartScanning(string SourceCode)
@@ -202,7 +203,6 @@ namespace TINY_Compiler
                     FindTokenClass(CurrentLexeme);
                     i = j;
                 }
-
                 else if (CurrentChar == '|')
                 {
                     j++;
@@ -259,7 +259,6 @@ namespace TINY_Compiler
                     FindTokenClass(CurrentLexeme);
                     i = j;
                 }
-
                 else
                 {
                     FindTokenClass(CurrentLexeme);
@@ -267,6 +266,7 @@ namespace TINY_Compiler
 
                 TINY_Compiler.TokenStream = Tokens;
             }
+
             void FindTokenClass(string Lex)
             {
                 Token_Class TC;
@@ -289,7 +289,7 @@ namespace TINY_Compiler
                 //Is it an identifier?
                 else if (isIdentifier(Lex))
                 {
-                    TC = Token_Class.Idenifier;
+                    TC = Token_Class.Identifier;
                     Tok.token_type = TC;
                     Tokens.Add(Tok);
                 }
@@ -314,8 +314,6 @@ namespace TINY_Compiler
                 }
             }
 
-
-
             bool isIdentifier(string lex)
             {
                 bool isValid = true;
@@ -333,7 +331,7 @@ namespace TINY_Compiler
             bool isString(string lex)
             {
                 bool isValid = true;
-                // Check if the lex is an identifier or not.
+                // Check if the lex is an String or not
                 //
                 var pattern = new Regex("^\".*\"$");
                 if (!pattern.IsMatch(lex))
