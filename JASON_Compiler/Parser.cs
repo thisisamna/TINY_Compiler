@@ -436,7 +436,56 @@ namespace TINY_Compiler
             return null;
         }
 
+        private Node If_stat()  //done
+        {
+            Node if_stat = new Node("if_stat");
+            if_stat.Children.Add(match(Token_Class.IF));
 
+            if_stat.Children.Add(Cond_Stmt());
+            if_stat.Children.Add(match(Token_Class.THEN));
+            if_stat.Children.Add(Statements());
+
+            if_stat.Children.Add(Else_if_stat());
+            if_stat.Children.Add(Else_stat());
+            if_stat.Children.Add(match(Token_Class.ENDL));
+
+
+            return if_stat;
+        }
+
+        private Node Else_if_stat()
+        {
+            Node else_if_stat = new Node("else_if_stat");
+            if (TokenStream[InputPointer].token_type == Token_Class.ELSEIF) { 
+                
+                else_if_stat.Children.Add(match(Token_Class.ELSEIF));
+                else_if_stat.Children.Add(match(Token_Class.THEN));
+                else_if_stat.Children.Add(match(Token_Class.ENDL));
+
+                else_if_stat.Children.Add(Cond_Stmt());
+                else_if_stat.Children.Add(Else_if_stat());
+                else_if_stat.Children.Add(Else_stat());
+                else_if_stat.Children.Add(Statements());
+
+                return else_if_stat;
+            }
+            return null;
+        }
+
+        private Node Else_stat()   ////ddooonnee
+        {
+            Node else_stat = new Node("else_stat");
+            if (TokenStream[InputPointer].token_type == Token_Class.ELSE)
+            {
+
+                else_stat.Children.Add(match(Token_Class.ELSE));
+                else_stat.Children.Add(match(Token_Class.ENDL));
+                else_stat.Children.Add(Statements());
+
+                return else_stat;
+            }
+            return null;
+        }
 
 
     }
