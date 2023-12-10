@@ -289,6 +289,15 @@ namespace TINY_Compiler
             return expression;
             // throw new NotImplementedException();
         }
+        private Node Equation()
+        {
+            Node equation = new Node("equation");
+
+            
+
+
+            return equation;
+        }
 
         private Node Write_Statement()
         {
@@ -508,7 +517,7 @@ namespace TINY_Compiler
             return function_statement;
         }
 
-        private Node Function_Decleration() //function decleration
+        private Node Function_Decleration() //function decleration //done
         {
             //Function_Declaration → Datatype Identifier (Parameters)
 
@@ -516,7 +525,7 @@ namespace TINY_Compiler
 
             function_declaration.Children.Add(Datatype());
 
-            function_declaration.Children.Add(match(Token_Class.Idenifier));
+            function_declaration.Children.Add(match(Token_Class.Identifier));
             function_declaration.Children.Add(match(Token_Class.LParanthesis));
             function_declaration.Children.Add(Parameters());
             function_declaration.Children.Add(match(Token_Class.RParanthesis));
@@ -524,11 +533,11 @@ namespace TINY_Compiler
             return function_declaration;
         }
         //par
-        private Node Parameters() //parameters
+        private Node Parameters() //parameters  //not yet
         {
             //Parameters → Parameter | Parameter , Parameters | ε
             Node parameters = new Node("parameters");
-            parameters.Children.Add(Parameters2());
+            
             return parameters;
         }
 
@@ -544,24 +553,20 @@ namespace TINY_Compiler
         //}
 
 
-        private Node Function_Body() //function body
+        private Node Function_Body() //function body //done
         {
-            //Function_Body → { Statements Retrun_Statment }
+            //Function_Body → { Statements Ret_stmt }
 
             Node function_body = new Node("function_body");
-            if (TokenStream[InputPointer].token_type == Token_Class.LCurlyBrace)
-            {
-                function_body.Children.Add(match(Token_Class.LCurlyBrace));
-                function_body.Children.Add(Statements());
-                function_body.Children.Add(Return_Statement());
-                function_body.Children.Add(match(Token_Class.Semicolon));
-                function_body.Children.Add(match(Token_Class.RCurlyBrace));
+            function_body.Children.Add(match(Token_Class.LCurlyBrace));
+            function_body.Children.Add(Statements());
+            function_body.Children.Add(Ret_stmt());
+            function_body.Children.Add(match(Token_Class.RCurlyBrace));
                 return function_body;
 
+        }
 
-            }
-
-            private Node Return_Statement()
+            private Node Ret_stmt()
             {
                 Node ret = new Node("Return_Statment");
                 if (TokenStream[InputPointer].token_type == Token_Class.RETURN)
@@ -594,7 +599,7 @@ namespace TINY_Compiler
                 return if_stat;
             }
 
-            private Node Else_if_stat()
+            private Node Else_if_stat() //done
             {
                 Node else_if_stat = new Node("else_if_stat");
                 if (TokenStream[InputPointer].token_type == Token_Class.ELSEIF) {
@@ -613,7 +618,7 @@ namespace TINY_Compiler
                 return null;
             }
 
-            private Node Else_stat()   ////ddooonnee
+            private Node Else_stat()   ////done
             {
                 Node else_stat = new Node("else_stat");
                 if (TokenStream[InputPointer].token_type == Token_Class.ELSE)
@@ -631,5 +636,5 @@ namespace TINY_Compiler
 
         }
     } 
-}
+
 
