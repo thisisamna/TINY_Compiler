@@ -350,21 +350,17 @@ namespace TINY_Compiler
         }
 
 
-        private Node Parameter()
+        private Node Parameter() //done
         {
             //Parameter → Datatype Identifier
             Node parameter = new Node("parameter");
 
             parameter.Children.Add(Datatype());
-            if (TokenStream[InputPointer].token_type == Token_Class.Identifier)
-            {
-                parameter.Children.Add(match(Token_Class.Identifier));
-            }
-            
+           parameter.Children.Add(match(Token_Class.Idenifier));
             return parameter;
         }
 
-        private Node Function_Statement() //function statement
+        private Node Function_Statement() //function statement    //done
         {
             //Function_Statement → Function_Decleration Function_Body
             Node function_statement = new Node("function_statement");
@@ -381,53 +377,48 @@ namespace TINY_Compiler
             Node function_declaration = new Node("function_declaration");
 
             function_declaration.Children.Add(Datatype());
-            if (TokenStream[InputPointer].token_type == Token_Class.Identifier)
-            {
-                function_declaration.Children.Add(match(Token_Class.Identifier));
+           
+                function_declaration.Children.Add(match(Token_Class.Idenifier));
                 function_declaration.Children.Add(match(Token_Class.LParanthesis));
                 function_declaration.Children.Add(Parameters());
                 function_declaration.Children.Add(match(Token_Class.RParanthesis));
-
-            }
-            function_declaration.Children.Add(Function_Body());
+      
             return function_declaration;
         }
         //par
         private Node Parameters() //parameters
         {
-            //Parameters → ε Parameters'
+            //Parameters → Parameter | Parameter , Parameters | ε
             Node parameters = new Node("parameters");
             parameters.Children.Add(Parameters2());
             return parameters;
         }
 
-        private Node Parameters2()
-        {
-            //Parameters’ → Parameter Parameters’ | ε
+        //private Node Parameters2()
+        //{
+        //    //Parameters’ → Parameter Parameters’ | ε
 
-            Node parameters2 = new Node("parameters2");
+        //    Node parameters2 = new Node("parameters2");
 
-            parameters2.Children.Add(Parameter());
-            Parameters2(); //recursion
-            return parameters2; //?
-        }
+        //    parameters2.Children.Add(Parameter());
+        //    Parameters2(); //recursion
+        //    return parameters2; //?
+        //}
 
         
         private Node Function_Body() //function body
         {
-            //Function_Body → {Statements Retrun_Statment;}
+            //Function_Body → { Statements Retrun_Statment }
 
             Node function_body = new Node("function_body");
-            if (TokenStream[InputPointer].token_type == Token_Class.LCurlyBrace)
-            {
+            
                 function_body.Children.Add(match(Token_Class.LCurlyBrace));
                 function_body.Children.Add(Statements());
                 function_body.Children.Add(Return_Statement());
-                function_body.Children.Add(match(Token_Class.Semicolon));
                 function_body.Children.Add(match(Token_Class.RCurlyBrace));
                 return function_body; 
-            }
-            return null;
+            
+            
         }
 
         private Node Return_Statement()

@@ -13,7 +13,7 @@ public enum Token_Class
 { //reserved words 
     INTEGER,FLOAT, STRING ,READ , 
     WRITE , REPEAT , UNTIL , IF , 
-    ELSEIF , ELSE , THEN , RETURN ,ENDL,
+    ELSEIF , ELSE , THEN , RETURN ,ENDL,END, Main,
     //Arithmetic operator 
     PlusOp, MinusOp, MultiplyOp, DivideOp,
     //Assignment operator :=  and Semicolon ;
@@ -24,7 +24,7 @@ public enum Token_Class
     //Boolean_Operator: AND operator “&&” and OR operator “||”
     AndOp, OrOp,
     //
-    Dot, LParanthesis, RParanthesis, LBrace, RBrace,Comma,
+    Dot, LParanthesis, RParanthesis, LBrace, RBrace,Comma, LCurlyBrace, RCurlyBrace,
     //
 
     Idenifier, Number, String
