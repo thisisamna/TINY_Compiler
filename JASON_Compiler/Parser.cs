@@ -248,10 +248,11 @@ namespace TINY_Compiler
 
         private Node Statements() //statements
         {
-            //i'm not really sure
-            //Statements → ε Statements’
+            //Statements  → Statement Statements2 
+            bool longIf = true; //i'm working on it give mins
 
             Node statements = new Node("statements");
+            statements.Children.Add(Statement());
             statements.Children.Add(Statements2());
             return statements;
 
@@ -259,11 +260,17 @@ namespace TINY_Compiler
 
         private Node Statements2()
         {
-            //Statements’ → Statement Statements’ | ε
+            //Statements2 →  Statements | ε 
             Node statements2 = new Node("statements2");
-            statements2.Children.Add(Statement());
-            Statements2(); //recursion
-            return statements2;
+            bool longIf = true; //i'm working on it give mins
+            if (longIf)
+            {
+                statements2.Children.Add(Statements());
+                Statements2(); //recursion
+                return statements2;
+            }
+            else
+                return null; ;
 
         }
 
@@ -497,7 +504,7 @@ namespace TINY_Compiler
         }
 
 
-        private Node Parameter() //done
+        private Node Parameter() //parameter //done
         {
             //Parameter → Datatype Identifier
             Node parameter = new Node("parameter");
@@ -532,25 +539,43 @@ namespace TINY_Compiler
 
             return function_declaration;
         }
-        //par
+        
         private Node Parameters() //parameters  //not yet
         {
-            //Parameters → Parameter | Parameter , Parameters | ε
+            //Parameters → Parameter Parameters2 | ε
+          
             Node parameters = new Node("parameters");
-            
-            return parameters;
+            bool isInteger = (TokenStream[InputPointer].token_type == Token_Class.INTEGER);
+            bool isFloat = (TokenStream[InputPointer].token_type == Token_Class.FLOAT);
+            bool isString = (TokenStream[InputPointer].token_type == Token_Class.String);
+            if (isInteger || isFloat || isString)
+            {
+                parameters.Children.Add(Parameter());
+                parameters.Children.Add(Parameters2());
+                return parameters;
+            }
+            else
+                return null;
         }
 
-        //private Node Parameters2()
-        //{
-        //    //Parameters’ → Parameter Parameters’ | ε
+        private Node Parameters2()
+        {
+            //Parameters2 →  “,”  Parameters | ε
 
-        //    Node parameters2 = new Node("parameters2");
+            Node parameters2 = new Node("parameters2");
 
-        //    parameters2.Children.Add(Parameter());
-        //    Parameters2(); //recursion
-        //    return parameters2; //?
-        //}
+            if (TokenStream[InputPointer].token_type == Token_Class.Comma)
+            {
+                parameters2.Children.Add(match(Token_Class.Comma));
+                parameters2.Children.Add(Parameters());
+                return parameters2;
+                //recursion
+            }
+            else
+                return null;
+            
+
+        }
 
 
         private Node Function_Body() //function body //done
@@ -562,76 +587,76 @@ namespace TINY_Compiler
             function_body.Children.Add(Statements());
             function_body.Children.Add(Ret_stmt());
             function_body.Children.Add(match(Token_Class.RCurlyBrace));
-                return function_body;
-
+            return function_body;
+ 
         }
 
-            private Node Ret_stmt()
+        private Node Ret_stmt()
+        {
+            Node ret = new Node("Return_Statment");
+            if (TokenStream[InputPointer].token_type == Token_Class.RETURN)
             {
-                Node ret = new Node("Return_Statment");
-                if (TokenStream[InputPointer].token_type == Token_Class.RETURN)
-                {
-                    ret.Children.Add(match(Token_Class.RETURN));
-                    ret.Children.Add(Experssion());
-                    return ret;
-
-                }
-
-
-
+                ret.Children.Add(match(Token_Class.RETURN));
+                ret.Children.Add(Experssion());
                 return ret;
+
             }
 
-            private Node If_stat()  //done
+
+
+            return ret;
+        }
+
+        private Node If_stat()  //done
+        {
+            Node if_stat = new Node("if_stat");
+            if_stat.Children.Add(match(Token_Class.IF));
+
+            if_stat.Children.Add(Cond_Stmt());
+            if_stat.Children.Add(match(Token_Class.THEN));
+            if_stat.Children.Add(Statements());
+
+            if_stat.Children.Add(Else_if_stat());
+            if_stat.Children.Add(Else_stat());
+            if_stat.Children.Add(match(Token_Class.ENDL));
+
+
+            return if_stat;
+        }
+
+        private Node Else_if_stat() //done
+        {
+            Node else_if_stat = new Node("else_if_stat");
+            if (TokenStream[InputPointer].token_type == Token_Class.ELSEIF) {
+
+                else_if_stat.Children.Add(match(Token_Class.ELSEIF));
+                else_if_stat.Children.Add(match(Token_Class.THEN));
+                else_if_stat.Children.Add(match(Token_Class.ENDL));
+
+                else_if_stat.Children.Add(Cond_Stmt());
+                else_if_stat.Children.Add(Else_if_stat());
+                else_if_stat.Children.Add(Else_stat());
+                else_if_stat.Children.Add(Statements());
+
+                return else_if_stat;
+            }
+            return null;
+        }
+
+        private Node Else_stat()   ////done
+        {
+            Node else_stat = new Node("else_stat");
+            if (TokenStream[InputPointer].token_type == Token_Class.ELSE)
             {
-                Node if_stat = new Node("if_stat");
-                if_stat.Children.Add(match(Token_Class.IF));
 
-                if_stat.Children.Add(Cond_Stmt());
-                if_stat.Children.Add(match(Token_Class.THEN));
-                if_stat.Children.Add(Statements());
+                else_stat.Children.Add(match(Token_Class.ELSE));
+                else_stat.Children.Add(match(Token_Class.ENDL));
+                else_stat.Children.Add(Statements());
 
-                if_stat.Children.Add(Else_if_stat());
-                if_stat.Children.Add(Else_stat());
-                if_stat.Children.Add(match(Token_Class.ENDL));
-
-
-                return if_stat;
+                return else_stat;
             }
-
-            private Node Else_if_stat() //done
-            {
-                Node else_if_stat = new Node("else_if_stat");
-                if (TokenStream[InputPointer].token_type == Token_Class.ELSEIF) {
-
-                    else_if_stat.Children.Add(match(Token_Class.ELSEIF));
-                    else_if_stat.Children.Add(match(Token_Class.THEN));
-                    else_if_stat.Children.Add(match(Token_Class.ENDL));
-
-                    else_if_stat.Children.Add(Cond_Stmt());
-                    else_if_stat.Children.Add(Else_if_stat());
-                    else_if_stat.Children.Add(Else_stat());
-                    else_if_stat.Children.Add(Statements());
-
-                    return else_if_stat;
-                }
-                return null;
-            }
-
-            private Node Else_stat()   ////done
-            {
-                Node else_stat = new Node("else_stat");
-                if (TokenStream[InputPointer].token_type == Token_Class.ELSE)
-                {
-
-                    else_stat.Children.Add(match(Token_Class.ELSE));
-                    else_stat.Children.Add(match(Token_Class.ENDL));
-                    else_stat.Children.Add(Statements());
-
-                    return else_stat;
-                }
-                return null;
-            }
+            return null;
+        }
 
 
         }
