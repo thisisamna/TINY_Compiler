@@ -246,9 +246,9 @@ namespace TINY_Compiler
             //Fun_call -> Identifier “(“  args  “)”
             Node function_Call = new Node("Function_Call");
             function_Call.Children.Add(match(Token_Class.Identifier));
-            function_Call.Children.Add(match(Token_Class.LCurlyBrace));
+            function_Call.Children.Add(match(Token_Class.LBrace));
             function_Call.Children.Add(args());
-            function_Call.Children.Add(match(Token_Class.RCurlyBrace));
+            function_Call.Children.Add(match(Token_Class.RBrace));
             return function_Call;
         }
 
@@ -418,13 +418,13 @@ namespace TINY_Compiler
             //Function_Body → {Statements Retrun_Statment;}
 
             Node function_body = new Node("function_body");
-            if (TokenStream[InputPointer].token_type == Token_Class.LCurlyBrace)
+            if (TokenStream[InputPointer].token_type == Token_Class.LBrace)
             {
-                function_body.Children.Add(match(Token_Class.LCurlyBrace));
+                function_body.Children.Add(match(Token_Class.LBrace));
                 function_body.Children.Add(Statements());
                 function_body.Children.Add(Return_Statement());
                 function_body.Children.Add(match(Token_Class.Semicolon));
-                function_body.Children.Add(match(Token_Class.RCurlyBrace));
+                function_body.Children.Add(match(Token_Class.RBrace));
                 return function_body; 
             }
             return null;
