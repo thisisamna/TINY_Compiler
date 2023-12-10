@@ -94,7 +94,7 @@ namespace TINY_Compiler
         {
             Node Main_Function_var = new Node("Main_Function");
             Main_Function_var.Children.Add(Datatype());
-            Main_Function_var.Children.Add(match(Token_Class.Main));
+            Main_Function_var.Children.Add(match(Token_Class.MAIN));
             Main_Function_var.Children.Add(match(Token_Class.LParanthesis));
             Main_Function_var.Children.Add(match(Token_Class.RParanthesis));
             Main_Function_var.Children.Add(Function_Body());
