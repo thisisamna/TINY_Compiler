@@ -164,7 +164,7 @@ namespace TINY_Compiler
                 }
                 else if (TokenStream[InputPointer].token_type == Token_Class.Identifier) //AMBUGUITY
                 {
-                    ++InputPointer; //i dont know i just did what i thought was right
+                    ++InputPointer; 
                     if (InputPointer < TokenStream.Count)
                     {
                         if (TokenStream[InputPointer].token_type == Token_Class.LParanthesis)
@@ -330,24 +330,21 @@ namespace TINY_Compiler
                         bool isNotEqualOp = (TokenStream[InputPointer].token_type == Token_Class.NotEqualOp);
                         bool isAssignmentOp = (TokenStream[InputPointer].token_type == Token_Class.AssignmentOp);
 
-                        --InputPointer;
+                        
                         if (isAssignmentOp)
                         {
+                            --InputPointer;
                             statement.Children.Add(Ass_Stmt());
                             return statement;
                         }
                         if (isLessOp || isGreatOp || isEqualOp || isNotEqualOp)
                         {
+                            --InputPointer;
                             statement.Children.Add(Condition());
                             return statement;
                         }
-
-
                     }
-                    else
-                        --InputPointer;
-
-                    return statement;
+                    --InputPointer;
                 }
                 if (TokenStream[InputPointer].token_type == Token_Class.READ)
                 {
@@ -408,9 +405,27 @@ namespace TINY_Compiler
                     expression.Children.Add(match(Token_Class.String));
                     return expression;
                 }
+                //AMBIGUITY
                 if (isNumber || isIdnetifier) //term or equation
                 {
-                    expression.Children.Add(Equation()); //ambiguity here but the equation has term within it
+                    ++InputPointer; 
+                    if (InputPointer < TokenStream.Count)
+                    {
+                        bool isPlusOp = (TokenStream[InputPointer].token_type == Token_Class.PlusOp);
+                        bool isMinusOp = (TokenStream[InputPointer].token_type == Token_Class.MinusOp);
+                        bool isMultiplyOp = (TokenStream[InputPointer].token_type == Token_Class.MultiplyOp);
+                        bool isDivideOp = (TokenStream[InputPointer].token_type == Token_Class.DivideOp);
+
+                        
+                        if (isPlusOp || isMinusOp || isMultiplyOp || isDivideOp)
+                        {
+                            --InputPointer;
+                            expression.Children.Add(Equation());
+                            return expression;
+                        }
+                    }
+                    --InputPointer;
+                    expression.Children.Add(Term()); 
                     return expression;
                 }
 
@@ -615,9 +630,9 @@ namespace TINY_Compiler
             //Fun_call -> Identifier (  args  )
             Node function_Call = new Node("Function_Call");
             function_Call.Children.Add(match(Token_Class.Identifier));
-            function_Call.Children.Add(match(Token_Class.LBrace));
+            function_Call.Children.Add(match(Token_Class.LParanthesis));
             function_Call.Children.Add(args());
-            function_Call.Children.Add(match(Token_Class.RBrace));
+            function_Call.Children.Add(match(Token_Class.RParanthesis));
             return function_Call;
         }
 
@@ -818,10 +833,10 @@ namespace TINY_Compiler
             //Function_Body → { Statements Ret_stmt }
 
             Node function_body = new Node("function_body");
-            function_body.Children.Add(match(Token_Class.LCurlyBrace));
+            function_body.Children.Add(match(Token_Class.LBrace));
             function_body.Children.Add(Statements());
             function_body.Children.Add(Return_Statement());
-            function_body.Children.Add(match(Token_Class.RCurlyBrace));
+            function_body.Children.Add(match(Token_Class.RBrace));
             return function_body;
  
         }
