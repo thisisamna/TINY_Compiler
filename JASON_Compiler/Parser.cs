@@ -120,7 +120,7 @@ namespace TINY_Compiler
         {
             //cond_op →    < |   > |   = | <>
             Node condi = new Node("condition_Operator");
-            if (InputPointer < TokenStream.Capacity)
+            if (InputPointer < TokenStream.Count)
             {
                 if (TokenStream[InputPointer].token_type == Token_Class.LessThanOp)
                 {
@@ -155,7 +155,7 @@ namespace TINY_Compiler
         {
             //Term → number | identifier | function_call
             Node term = new Node("Term");
-            if (InputPointer < TokenStream.Capacity)
+            if (InputPointer < TokenStream.Count)
             {
                 if (TokenStream[InputPointer].token_type == Token_Class.Number)
                 {
@@ -204,7 +204,7 @@ namespace TINY_Compiler
             //Fun_stmts → Function_Statement Fun_stmts | ε
 
             Node Fun_stmts_var = new Node("Fun_stmts");
-            if (InputPointer < TokenStream.Capacity)
+            if (InputPointer < TokenStream.Count)
             {
                 if (TokenStream[InputPointer].token_type == Token_Class.INTEGER || TokenStream[InputPointer].token_type == Token_Class.FLOAT || TokenStream[InputPointer].token_type == Token_Class.STRING)
                 {
@@ -224,7 +224,7 @@ namespace TINY_Compiler
         private Node Datatype()
         {
             Node Datatype_var = new Node("Datatype");
-            if (InputPointer < TokenStream.Capacity)
+            if (InputPointer < TokenStream.Count)
             {
                 if (TokenStream[InputPointer].token_type == Token_Class.INTEGER)
                 {
@@ -264,7 +264,7 @@ namespace TINY_Compiler
             //Statements2 →  Statements | ε 
 
             Node statements2 = new Node("statements2");
-            if (InputPointer < TokenStream.Capacity)
+            if (InputPointer < TokenStream.Count)
             {
                 bool isInteger = (TokenStream[InputPointer].token_type == Token_Class.INTEGER);
                 bool isFloat = (TokenStream[InputPointer].token_type == Token_Class.FLOAT);
@@ -297,7 +297,7 @@ namespace TINY_Compiler
         private Node Statement() //not done yet
         {
             Node statement = new Node("statement");
-            if (InputPointer < TokenStream.Capacity)
+            if (InputPointer < TokenStream.Count)
             {
                 bool isInteger = (TokenStream[InputPointer].token_type == Token_Class.INTEGER);
                 bool isFloat = (TokenStream[InputPointer].token_type == Token_Class.FLOAT);
@@ -362,7 +362,7 @@ namespace TINY_Compiler
             //Expression → string | Term | Equation
             Node expression = new Node("Expression");
 
-            if (InputPointer < TokenStream.Capacity)
+            if (InputPointer < TokenStream.Count)
             {
                 bool isString = (TokenStream[InputPointer].token_type == Token_Class.String);
                 bool isNumber = (TokenStream[InputPointer].token_type == Token_Class.Number);
@@ -403,7 +403,7 @@ namespace TINY_Compiler
             //Equation2 → Term | (Equation)
 
             Node equation2 = new Node("equation2");
-            if (InputPointer < TokenStream.Capacity)
+            if (InputPointer < TokenStream.Count)
             {
                 bool isNumber = (TokenStream[InputPointer].token_type == Token_Class.Number);
                 bool isIdnetifier = (TokenStream[InputPointer].token_type == Token_Class.Identifier);
@@ -432,7 +432,7 @@ namespace TINY_Compiler
             //op → + | - | * | /
 
             Node op = new Node("op");
-            if (InputPointer < TokenStream.Capacity)
+            if (InputPointer < TokenStream.Count)
             {
                 if (TokenStream[InputPointer].token_type == Token_Class.PlusOp)
                 {
@@ -481,9 +481,7 @@ namespace TINY_Compiler
             
             Node w = new Node("W");
   
-            if (InputPointer < TokenStream.Capacity)
-            {
-                if (InputPointer < TokenStream.Capacity)
+                if (InputPointer < TokenStream.Count)
                 {
                     bool isString = (TokenStream[InputPointer].token_type == Token_Class.String);
                     bool isNumber = (TokenStream[InputPointer].token_type == Token_Class.Number);
@@ -503,7 +501,7 @@ namespace TINY_Compiler
                     }
                     
                 }
-            }
+            
             return w;
         }
         private Node Cond_Stmt()
@@ -519,7 +517,7 @@ namespace TINY_Compiler
         {
             //Cond_Stmt2 -> Bool_Cond Cond_Stmt2 | e
             Node cond_stmt2 = new Node("cond_stmt2");
-            if (InputPointer < TokenStream.Capacity)
+            if (InputPointer < TokenStream.Count)
             {
                 if (TokenStream[InputPointer].token_type == Token_Class.AndOp || TokenStream[InputPointer].token_type == Token_Class.OrOp)
                 {
@@ -548,7 +546,7 @@ namespace TINY_Compiler
         {
             //Bool_Op -> && | "||"
             Node bool_Op = new Node("Bool_Op");
-            if (InputPointer < TokenStream.Capacity)
+            if (InputPointer < TokenStream.Count)
             {
                 if (TokenStream[InputPointer].token_type == Token_Class.AndOp)
                 {
@@ -593,7 +591,7 @@ namespace TINY_Compiler
         {
             //args -> Identifier  args2  |   𝜀
             Node args_var = new Node("args");
-            if (InputPointer < TokenStream.Capacity)
+            if (InputPointer < TokenStream.Count)
             {
                 if (TokenStream[InputPointer].token_type == Token_Class.Identifier)
                 {
@@ -613,7 +611,7 @@ namespace TINY_Compiler
         {
             //args2 ->   “,”  Identifier  args2  |   𝜀
             Node args2_var = new Node("args2");
-            if (InputPointer < TokenStream.Capacity)
+            if (InputPointer < TokenStream.Count)
             {
                 if (TokenStream[InputPointer].token_type == Token_Class.Comma)
                 {
@@ -646,7 +644,7 @@ namespace TINY_Compiler
             //Identifiers → Assignment_Statement Iden2 | Identifier Iden
             Node Identifiers_var = new Node("Identifiers");
             Identifiers_var.Children.Add(match(Token_Class.Identifier));
-            if (InputPointer < TokenStream.Capacity)
+            if (InputPointer < TokenStream.Count)
             {
                 if (TokenStream[InputPointer].token_type == Token_Class.AssignmentOp)
                 {
@@ -668,7 +666,7 @@ namespace TINY_Compiler
         private Node Iden2()//Datatype //not checked
         {
             Node Iden2_var = new Node("Iden2");
-            if (InputPointer < TokenStream.Capacity)
+            if (InputPointer < TokenStream.Count)
             {
                 if (TokenStream[InputPointer].token_type == Token_Class.Comma)
                 {
@@ -742,7 +740,7 @@ namespace TINY_Compiler
           
             Node parameters = new Node("parameters");
 
-            if (InputPointer < TokenStream.Capacity)
+            if (InputPointer < TokenStream.Count)
             {
                 bool isInteger = (TokenStream[InputPointer].token_type == Token_Class.INTEGER);
                 bool isFloat = (TokenStream[InputPointer].token_type == Token_Class.FLOAT);
@@ -765,7 +763,7 @@ namespace TINY_Compiler
             //Parameters2 →  “,”  Parameters | ε
 
             Node parameters2 = new Node("parameters2");
-            if (InputPointer < TokenStream.Capacity)
+            if (InputPointer < TokenStream.Count)
             {
                 if (TokenStream[InputPointer].token_type == Token_Class.Comma)
                 {
