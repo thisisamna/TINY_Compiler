@@ -381,22 +381,121 @@ namespace TINY_Compiler
         {
             Node expression = new Node("Expression");
 
-            expression.Children.Add(match(Token_Class.STRING));
+            if (InputPointer < TokenStream.Capacity)
+            {
+                bool isString = (TokenStream[InputPointer].token_type == Token_Class.String);
+                bool isNumber = (TokenStream[InputPointer].token_type == Token_Class.Number);
+                bool isIdnetifier = (TokenStream[InputPointer].token_type == Token_Class.Identifier);
 
+                
+                if (isString)
+                {
+                    expression.Children.Add(match(Token_Class.String));
+                    return expression;
+                }
+                if (isNumber || isIdnetifier) //term or equation
+                {
+                    expression.Children.Add(Equation()); //ambiguity here but the equation has term within it
+                    return expression;
+                }
 
-            expression.Children.Add(Term());
-            expression.Children.Add(Equation());
-
-
-
+            }
             return expression;
-            // throw new NotImplementedException();
+
+
+
         }
-        private Node Equation() //not done
+        private Node Equation() 
         {
             Node equation = new Node("equation");
+            equation.Children.Add(Equation2());
+            equation.Children.Add(Equation3());
             return equation;
         }
+
+        private Node Equation2() 
+        {
+            Node equation2 = new Node("equation2");
+            if (InputPointer < TokenStream.Capacity)
+            {
+                bool isNumber = (TokenStream[InputPointer].token_type == Token_Class.Number);
+                bool isIdnetifier = (TokenStream[InputPointer].token_type == Token_Class.Identifier);
+                bool isParanthesis = (TokenStream[InputPointer].token_type == Token_Class.LParanthesis);
+
+                if (isNumber || isIdnetifier)
+                {
+                    equation2.Children.Add(Term());
+                    return equation2;
+                }
+                else if (isParanthesis)
+                {
+                    equation2.Children.Add(Equation());
+                    return equation2;
+                }
+            }
+
+            return equation2;
+        }
+
+        private Node Equation3() 
+        {
+            Node equation3 = new Node("equation");
+            if (InputPointer < TokenStream.Capacity)
+            {
+                bool isPlusOp = (TokenStream[InputPointer].token_type == Token_Class.PlusOp);
+                bool isMinsOp = (TokenStream[InputPointer].token_type == Token_Class.MinusOp);
+                bool isMultiplyOp = (TokenStream[InputPointer].token_type == Token_Class.MultiplyOp);
+                bool isDivideOp = (TokenStream[InputPointer].token_type == Token_Class.DivideOp);
+
+
+
+
+                if (isPlusOp || isMinsOp || isMultiplyOp || isDivideOp)
+                {
+                    equation3.Children.Add(Arthmetic_Operator());
+                    equation3.Children.Add(Equation());
+                    equation3.Children.Add(Equation3());
+                    return equation3;
+
+                }
+            }
+            
+            return equation3;
+        }
+
+        private Node Arthmetic_Operator() //not done
+        {
+            Node op = new Node("op");
+            if (InputPointer < TokenStream.Capacity)
+            {
+                if (TokenStream[InputPointer].token_type == Token_Class.PlusOp)
+                {
+                    op.Children.Add(match(Token_Class.PlusOp));
+                    return op;
+                }
+                if (TokenStream[InputPointer].token_type == Token_Class.MinusOp)
+                {
+                    op.Children.Add(match(Token_Class.MinusOp));
+                    return op;
+                }
+                if (TokenStream[InputPointer].token_type == Token_Class.MultiplyOp)
+                {
+                    op.Children.Add(match(Token_Class.MultiplyOp));
+                    return op;
+                }
+                if (TokenStream[InputPointer].token_type == Token_Class.DivideOp)
+                {
+                    op.Children.Add(match(Token_Class.DivideOp));
+                    return op;
+                }
+
+            }
+
+            return op;
+        }
+
+
+
 
         private Node Write_Statement() //statement 
         {
@@ -445,7 +544,7 @@ namespace TINY_Compiler
                     //add to errors list? 
                 }
             }
-                return w;
+            return w;
         }
         private Node Cond_Stmt()
         {
