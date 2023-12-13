@@ -162,16 +162,25 @@ namespace TINY_Compiler
                     term.Children.Add(match(Token_Class.Number));
                     return term;
                 }
-                else if (TokenStream[InputPointer].token_type == Token_Class.Identifier)
+                else if (TokenStream[InputPointer].token_type == Token_Class.Identifier) //AMBUGUITY
                 {
+                    ++InputPointer; //i dont know i just did what i thought was right
+                    if (InputPointer < TokenStream.Count)
+                    {
+                        if (TokenStream[InputPointer].token_type == Token_Class.LParanthesis)
+                        {
+                            --InputPointer;
+                            term.Children.Add(Function_Call());
+                            return term;
+                        }
+                    }
+                    
+                    --InputPointer;
                     term.Children.Add(match(Token_Class.Identifier));
                     return term;
+
                 }
-                else
-                {
-                    term.Children.Add(Function_Call());
-                    return term;
-                }
+                
             }
             return term;
 
@@ -278,6 +287,7 @@ namespace TINY_Compiler
                 bool isElse = (TokenStream[InputPointer].token_type == Token_Class.ELSE);
                 bool isIdentifier = (TokenStream[InputPointer].token_type == Token_Class.Identifier);
 
+
                 bool isStatement = isInteger || isFloat || isString || isRead || isWrite || isReturn ||
                                     isRepeat || isIf || isElseIf || isElse || isIdentifier;
 
@@ -308,11 +318,35 @@ namespace TINY_Compiler
                     statement.Children.Add(Dcl_stmt());
                     return statement;
                 }
+                //AMBIGUITY
                 if (TokenStream[InputPointer].token_type == Token_Class.Identifier) //Ass_Stmt() or Cond()
                 {
-                    //if the next character is assignementOp the add ass_stmt
-                    //else add condtion
-                    //statement.Children.Add(Ass_Stmt());
+                    ++InputPointer; //i dont know i just did what i thought was right
+                    if (InputPointer < TokenStream.Count)
+                    {
+                        bool isLessOp = (TokenStream[InputPointer].token_type == Token_Class.LessThanOp);
+                        bool isGreatOp = (TokenStream[InputPointer].token_type == Token_Class.GreaterThanOp);
+                        bool isEqualOp = (TokenStream[InputPointer].token_type == Token_Class.EqualOp);
+                        bool isNotEqualOp = (TokenStream[InputPointer].token_type == Token_Class.NotEqualOp);
+                        bool isAssignmentOp = (TokenStream[InputPointer].token_type == Token_Class.AssignmentOp);
+
+                        --InputPointer;
+                        if (isAssignmentOp)
+                        {
+                            statement.Children.Add(Ass_Stmt());
+                            return statement;
+                        }
+                        if (isLessOp || isGreatOp || isEqualOp || isNotEqualOp)
+                        {
+                            statement.Children.Add(Condition());
+                            return statement;
+                        }
+
+
+                    }
+                    else
+                        --InputPointer;
+
                     return statement;
                 }
                 if (TokenStream[InputPointer].token_type == Token_Class.READ)
