@@ -386,17 +386,19 @@ namespace TINY_Compiler
 
 
         }
-        private Node Equation() 
+
+        private Node Equation()
         {
-            //Equation → Equation2 | Equation3
+            //Equation → Equation2 op Equation2
 
             Node equation = new Node("equation");
             equation.Children.Add(Equation2());
-            equation.Children.Add(Equation3());
+            equation.Children.Add(Arthmetic_Operator());
+            equation.Children.Add(Equation2());
             return equation;
         }
 
-        private Node Equation2() 
+        private Node Equation2()
         {
             //Equation2 → Term | (Equation)
 
@@ -407,47 +409,22 @@ namespace TINY_Compiler
                 bool isIdnetifier = (TokenStream[InputPointer].token_type == Token_Class.Identifier);
                 bool isParanthesis = (TokenStream[InputPointer].token_type == Token_Class.LParanthesis);
 
-                if (isNumber || isIdnetifier)
+
+                if (isNumber || isIdnetifier) //if it is term
                 {
                     equation2.Children.Add(Term());
                     return equation2;
                 }
                 else if (isParanthesis)
                 {
+                    equation2.Children.Add(match(Token_Class.LParanthesis));
                     equation2.Children.Add(Equation());
+                    equation2.Children.Add(match(Token_Class.RParanthesis));
                     return equation2;
                 }
             }
 
             return equation2;
-        }
-
-        private Node Equation3() 
-        {
-            //Equation3 → op Equation2 Equation3
-
-            Node equation3 = new Node("equation");
-            if (InputPointer < TokenStream.Capacity)
-            {
-                bool isPlusOp = (TokenStream[InputPointer].token_type == Token_Class.PlusOp);
-                bool isMinsOp = (TokenStream[InputPointer].token_type == Token_Class.MinusOp);
-                bool isMultiplyOp = (TokenStream[InputPointer].token_type == Token_Class.MultiplyOp);
-                bool isDivideOp = (TokenStream[InputPointer].token_type == Token_Class.DivideOp);
-
-
-
-
-                if (isPlusOp || isMinsOp || isMultiplyOp || isDivideOp)
-                {
-                    equation3.Children.Add(Arthmetic_Operator());
-                    equation3.Children.Add(Equation());
-                    equation3.Children.Add(Equation3());
-                    return equation3;
-
-                }
-            }
-            
-            return equation3;
         }
 
         private Node Arthmetic_Operator() //op
