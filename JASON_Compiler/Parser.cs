@@ -104,27 +104,22 @@ namespace TINY_Compiler
 
         }
       
-        private Node Condition() //condtion statement //cond() //not checked
+        private Node Condition() //condtion statement //cond()
         {
+            //cond →  Identifier cond_op Term
             Node cond = new Node("Condition");
-            //no need for the if condition
-            if (InputPointer < TokenStream.Capacity)
-            {
-                if (TokenStream[InputPointer].token_type == Token_Class.Identifier)
-                {
-                    cond.Children.Add(match(Token_Class.Identifier));
-                    cond.Children.Add(Condition_Operation());
-                    cond.Children.Add(Term());
-                    return cond;
-                }
-            }
 
+            cond.Children.Add(match(Token_Class.Identifier));
+            cond.Children.Add(Condition_Operator());
+            cond.Children.Add(Term());
             return cond;
+               
         }
         
-        private Node Condition_Operation() //not checked
+        private Node Condition_Operator() 
         {
-            Node condi = new Node("Condition_Operation");
+            //cond_op →    < |   > |   = | <>
+            Node condi = new Node("condition_Operator");
             if (InputPointer < TokenStream.Capacity)
             {
                 if (TokenStream[InputPointer].token_type == Token_Class.LessThanOp)
@@ -135,29 +130,28 @@ namespace TINY_Compiler
                 }
                 else if (TokenStream[InputPointer].token_type == Token_Class.GreaterThanOp)
                 {
+                    //<
                     condi.Children.Add(match(Token_Class.GreaterThanOp));
                     return condi;
-                    //<
                 }
                 else if (TokenStream[InputPointer].token_type == Token_Class.EqualOp)
                 {
-
                     //=
                     condi.Children.Add(match(Token_Class.EqualOp));
                     return condi;
                 }
                 else if (TokenStream[InputPointer].token_type == Token_Class.NotEqualOp)
                 {
+                    //<>
                     condi.Children.Add(match(Token_Class.NotEqualOp));
                     return condi;
-                    //<>
                 }
             }
 
             return condi;
 
         }
-        private Node Term()
+        private Node Term() //still not done yet
         {
             //Term → number | identifier | function_call
             Node term = new Node("Term");
@@ -300,7 +294,7 @@ namespace TINY_Compiler
 
         }
 
-        private Node Statement()
+        private Node Statement() //not done yet
         {
             Node statement = new Node("statement");
             if (InputPointer < TokenStream.Capacity)
@@ -365,6 +359,7 @@ namespace TINY_Compiler
 
         private Node Experssion() 
         {
+            //Expression → string | Term | Equation
             Node expression = new Node("Expression");
 
             if (InputPointer < TokenStream.Capacity)
@@ -393,6 +388,8 @@ namespace TINY_Compiler
         }
         private Node Equation() 
         {
+            //Equation → Equation2 | Equation3
+
             Node equation = new Node("equation");
             equation.Children.Add(Equation2());
             equation.Children.Add(Equation3());
@@ -401,6 +398,8 @@ namespace TINY_Compiler
 
         private Node Equation2() 
         {
+            //Equation2 → Term | (Equation)
+
             Node equation2 = new Node("equation2");
             if (InputPointer < TokenStream.Capacity)
             {
@@ -425,6 +424,8 @@ namespace TINY_Compiler
 
         private Node Equation3() 
         {
+            //Equation3 → op Equation2 Equation3
+
             Node equation3 = new Node("equation");
             if (InputPointer < TokenStream.Capacity)
             {
@@ -451,6 +452,8 @@ namespace TINY_Compiler
 
         private Node Arthmetic_Operator() //op
         {
+            //op → + | - | * | /
+
             Node op = new Node("op");
             if (InputPointer < TokenStream.Capacity)
             {
@@ -488,46 +491,40 @@ namespace TINY_Compiler
             //wt_stmt → Write W
             Node wt_stmt = new Node("Write_Statement");
 
-            //no need for the if condition
-            if (InputPointer < TokenStream.Capacity)
-            {
-                if (TokenStream[InputPointer].token_type == Token_Class.WRITE)
-                {
-                    wt_stmt.Children.Add(match(Token_Class.WRITE));
-                    wt_stmt.Children.Add(W());
-                    return wt_stmt;
 
-                }
-            }
+            wt_stmt.Children.Add(match(Token_Class.WRITE));
+            wt_stmt.Children.Add(W());
             return wt_stmt;
+
         }
-        private Node W()
+
+        private Node W() 
         {
             //W→ Expression; | endl
             
             Node w = new Node("W");
-            w.Children.Add(Experssion());
-            w.Children.Add(match(Token_Class.ENDL));
-
-            bool e = false;  //temperoray till we fix the equation
+  
             if (InputPointer < TokenStream.Capacity)
             {
-                if (e)
+                if (InputPointer < TokenStream.Capacity)
                 {
-                    w.Children.Add(Experssion());
-                    w.Children.Add(match(Token_Class.Semicolon));
-                    return w;
-                }
-                else if (TokenStream[InputPointer].token_type == Token_Class.WRITE)
-                {
-                    w.Children.Add(match(Token_Class.ENDL));
-                    w.Children.Add(match(Token_Class.Semicolon));
-                    return w;
+                    bool isString = (TokenStream[InputPointer].token_type == Token_Class.String);
+                    bool isNumber = (TokenStream[InputPointer].token_type == Token_Class.Number);
+                    bool isIdnetifier = (TokenStream[InputPointer].token_type == Token_Class.Identifier);
+                    if (isString || isNumber || isIdnetifier)
+                    {
+                        w.Children.Add(Experssion());
+                        w.Children.Add(match(Token_Class.Semicolon));
+                        return w;
+                    }
+                    else if (TokenStream[InputPointer].token_type == Token_Class.ENDL)
+                    {
+                        w.Children.Add(match(Token_Class.ENDL));
+                        w.Children.Add(match(Token_Class.Semicolon));
+                        return w;
 
-                }
-                else
-                {
-                    //add to errors list? 
+                    }
+                    
                 }
             }
             return w;
@@ -714,9 +711,9 @@ namespace TINY_Compiler
 
 
        
-        private Node Ass_Stmt() //statement 
+        private Node Ass_Stmt() //assignment statement
         {
-            //ass_stmt →  Identifier  “:=”  experssion
+            //ass_stmt →  Identifier  :=  experssion
             Node ass_stmt = new Node("Ass_Stmt");
            
             ass_stmt.Children.Add(match(Token_Class.Identifier));
@@ -727,7 +724,7 @@ namespace TINY_Compiler
         }
 
 
-        private Node Parameter() //parameter //done
+        private Node Parameter() 
         {
             //Parameter → Datatype Identifier
             Node parameter = new Node("parameter");
@@ -737,7 +734,7 @@ namespace TINY_Compiler
             return parameter;
         }
 
-        private Node Function_Statement() //function statement    //done
+        private Node Function_Statement() 
         {
             //Function_Statement → Function_Decleration Function_Body
             Node function_statement = new Node("function_statement");
@@ -747,7 +744,7 @@ namespace TINY_Compiler
             return function_statement;
         }
 
-        private Node Function_Decleration() //function decleration //done
+        private Node Function_Decleration() 
         {
             //Function_Declaration → Datatype Identifier (Parameters)
 
@@ -762,7 +759,7 @@ namespace TINY_Compiler
             return function_declaration;
         }
         
-        private Node Parameters() //parameters  //done
+        private Node Parameters() 
         {
             //Parameters → Parameter Parameters2 | ε
           
@@ -798,7 +795,6 @@ namespace TINY_Compiler
                     parameters2.Children.Add(match(Token_Class.Comma));
                     parameters2.Children.Add(Parameters());
                     return parameters2;
-                    //recursion
                 }
                 else
                     return null;
@@ -808,7 +804,7 @@ namespace TINY_Compiler
         }
 
 
-        private Node Function_Body() //function body //done
+        private Node Function_Body() 
         {
             //Function_Body → { Statements Ret_stmt }
 
@@ -823,7 +819,7 @@ namespace TINY_Compiler
 
         private Node Return_Statement() 
         {
-            //ret_stmt → Expression ;
+            //ret_stmt → return Expression ;
 
             Node ret = new Node("Return_Statment");
 
@@ -836,7 +832,7 @@ namespace TINY_Compiler
 
         }
 
-        private Node If_stat()  //If statement
+        private Node If_stat()  
         {
             //if_stat →  if Cond_Stmt then Statements else_if_stat else_stat end
             Node if_stat = new Node("if_stat");
@@ -853,9 +849,9 @@ namespace TINY_Compiler
             return if_stat;
         }
 
-        private Node Else_if_stat() //statement //not checked
+        private Node Else_if_stat() 
         {
-            //else_if_stat  →  elseif Cond_Stmt then Statements  else_if_stat  else_stat  end | ε
+            //else_if_stat  →  elseif Cond_Stmt then Statements  else_if_stat  else_stat  end 
 
             Node else_if_stat = new Node("else_if_stat");
             
