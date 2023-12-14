@@ -688,32 +688,28 @@ namespace TINY_Compiler
 
         }
 
-        private Node Identifiers()//Declaration_Statement non_terminal //not checked
+        private Node Identifiers()//Declaration_Statement non_terminal 
         {
-            //Identifiers → Assignment_Statement Iden2 | Identifier Iden
+            //Identifiers → Assignment_Statement Iden2 | Identifier Iden2
+            //Identifiers → Iden3 Iden2
+            //Iden3 → Identifier  | Assignment_Statement
             Node Identifiers_var = new Node("Identifiers");
-            Identifiers_var.Children.Add(match(Token_Class.Identifier));
-            if (InputPointer < TokenStream.Count)
-            {
-                if (TokenStream[InputPointer].token_type == Token_Class.AssignmentOp)
-                {
-                    Identifiers_var.Children.Add(match(Token_Class.AssignmentOp));
-                    Identifiers_var.Children.Add(Iden2());
-                    return Identifiers_var;
-                }
-                else
-                {
-                    Identifiers_var.Children.Add(Iden2());
+            //Identifiers_var.Children.Add(match(Token_Class.Identifier));
 
-                }
-            }
+            Identifiers_var.Children.Add(Iden3());
+            //Identifiers_var.Children.Add(match(Token_Class.AssignmentOp));
+            Identifiers_var.Children.Add(Iden2());
             return Identifiers_var;
+   
+
 
         }
 
 
         private Node Iden2()//Datatype //not checked
         {
+
+            //Iden2 → , Identifiers | ε
             Node Iden2_var = new Node("Iden2");
             if (InputPointer < TokenStream.Count)
             {
@@ -733,8 +729,38 @@ namespace TINY_Compiler
 
         }
 
+        private Node Iden3()
+        {
+            //Iden3 → Identifier  | Assignment_Statement
+            Node Iden3 = new Node("Iden3");
+            //Identifiers_var.Children.Add(match(Token_Class.Identifier));
+            if (InputPointer < TokenStream.Count)
+            {
+                if (TokenStream[InputPointer].token_type == Token_Class.Identifier)
+                {
+                    ++InputPointer;
+                    if (InputPointer < TokenStream.Count)
+                    {
+                        if (TokenStream[InputPointer].token_type == Token_Class.AssignmentOp)
+                        {
+                            --InputPointer;
+                            Iden3.Children.Add(Ass_Stmt());
+                            return Iden3;
+                        }
+                    }
+                    --InputPointer;
+                    Iden3.Children.Add(match(Token_Class.Identifier));
+                    return Iden3;
 
-       
+                }
+                
+            }
+            return null;
+
+        }
+
+
+
         private Node Ass_Stmt() //assignment statement
         {
             //ass_stmt →  Identifier  :=  experssion
