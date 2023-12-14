@@ -448,18 +448,19 @@ namespace TINY_Compiler
 
         private Node Equation()
         {
-            //Equation → Equation2 op Equation2
+            //Equation → Equation2 op Equation2 Equation3
 
             Node equation = new Node("equation");
             equation.Children.Add(Equation2());
             equation.Children.Add(Arthmetic_Operator());
             equation.Children.Add(Equation2());
+            equation.Children.Add(Equation3());
             return equation;
         }
 
         private Node Equation2()
         {
-            //Equation2 → Term | (Equation)
+            //Equation2 → Term | (Equation) 
 
             Node equation2 = new Node("equation2");
             if (InputPointer < TokenStream.Count)
@@ -484,6 +485,32 @@ namespace TINY_Compiler
             }
 
             return equation2;
+        }
+
+        private Node Equation3()
+        {
+            //Equation3 → op Eqaution | ε
+
+            Node equation3 = new Node("equation3");
+            if (InputPointer < TokenStream.Count)
+            {
+                bool isPlusOp = (TokenStream[InputPointer].token_type == Token_Class.PlusOp);
+                bool isMinusOp = (TokenStream[InputPointer].token_type == Token_Class.MinusOp);
+                bool isMultiplyOp = (TokenStream[InputPointer].token_type == Token_Class.MultiplyOp);
+                bool isDivideOp = (TokenStream[InputPointer].token_type == Token_Class.DivideOp);
+
+
+                if (isPlusOp || isMinusOp || isMultiplyOp || isDivideOp)
+                {
+                    equation3.Children.Add(Arthmetic_Operator());
+                    equation3.Children.Add(Equation());
+                    return equation3;
+                }
+                else
+                    return null;
+            }
+            return null;
+ 
         }
 
         private Node Arthmetic_Operator() //op
