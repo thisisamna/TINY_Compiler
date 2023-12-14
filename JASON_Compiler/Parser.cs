@@ -254,7 +254,7 @@ namespace TINY_Compiler
                     Datatype_var.Children.Add(match(Token_Class.FLOAT));
                     return Datatype_var;
                 }
-                else
+                else if (TokenStream[InputPointer].token_type == Token_Class.STRING)
                 {
                     Datatype_var.Children.Add(match(Token_Class.STRING));
                     return Datatype_var;
@@ -286,11 +286,11 @@ namespace TINY_Compiler
             {
                 bool isInteger = (TokenStream[InputPointer].token_type == Token_Class.INTEGER);
                 bool isFloat = (TokenStream[InputPointer].token_type == Token_Class.FLOAT);
-                bool isString = (TokenStream[InputPointer].token_type == Token_Class.String);
+                bool isString = (TokenStream[InputPointer].token_type == Token_Class.STRING);
                 bool isRead = (TokenStream[InputPointer].token_type == Token_Class.READ);
                 bool isWrite = (TokenStream[InputPointer].token_type == Token_Class.WRITE);
-                bool isReturn = false;
-               // bool isReturn = (TokenStream[InputPointer].token_type == Token_Class.RETURN);
+                //bool isReturn = false;
+                bool isReturn = (TokenStream[InputPointer].token_type == Token_Class.RETURN);
                 bool isRepeat = (TokenStream[InputPointer].token_type == Token_Class.REPEAT);
                 bool isIf = (TokenStream[InputPointer].token_type == Token_Class.IF);
                 bool isElseIf = (TokenStream[InputPointer].token_type == Token_Class.ELSEIF);
@@ -321,7 +321,7 @@ namespace TINY_Compiler
             {
                 bool isInteger = (TokenStream[InputPointer].token_type == Token_Class.INTEGER);
                 bool isFloat = (TokenStream[InputPointer].token_type == Token_Class.FLOAT);
-                bool isString = (TokenStream[InputPointer].token_type == Token_Class.String);
+                bool isString = (TokenStream[InputPointer].token_type == Token_Class.STRING);
 
                 if (isInteger || isFloat || isString)
                 {
@@ -366,11 +366,11 @@ namespace TINY_Compiler
                     statement.Children.Add(Write_Statement());
                     return statement;
                 }
-                //if (TokenStream[InputPointer].token_type == Token_Class.RETURN)
-                //{
-                //    statement.Children.Add(Return_Statement());
-                //    return statement;
-                //}
+                if (TokenStream[InputPointer].token_type == Token_Class.RETURN)
+                {
+                    statement.Children.Add(Return_Statement());
+                    return statement;
+                }
                 if (TokenStream[InputPointer].token_type == Token_Class.REPEAT)
                 {
                     statement.Children.Add(Rep_Stmt());
@@ -545,19 +545,19 @@ namespace TINY_Compiler
                     bool isString = (TokenStream[InputPointer].token_type == Token_Class.String);
                     bool isNumber = (TokenStream[InputPointer].token_type == Token_Class.Number);
                     bool isIdnetifier = (TokenStream[InputPointer].token_type == Token_Class.Identifier);
+                    if (TokenStream[InputPointer].token_type == Token_Class.ENDL)
+                    {
+                        w.Children.Add(match(Token_Class.ENDL));
+                        w.Children.Add(match(Token_Class.Semicolon));
+                        return w;
+                    }
                     if (isString || isNumber || isIdnetifier)
                     {
                         w.Children.Add(Experssion());
                         w.Children.Add(match(Token_Class.Semicolon));
                         return w;
                     }
-                    else if (TokenStream[InputPointer].token_type == Token_Class.ENDL)
-                    {
-                        w.Children.Add(match(Token_Class.ENDL));
-                        w.Children.Add(match(Token_Class.Semicolon));
-                        return w;
-
-                    }
+                    
                     
                 }
             
@@ -823,7 +823,7 @@ namespace TINY_Compiler
             {
                 bool isInteger = (TokenStream[InputPointer].token_type == Token_Class.INTEGER);
                 bool isFloat = (TokenStream[InputPointer].token_type == Token_Class.FLOAT);
-                bool isString = (TokenStream[InputPointer].token_type == Token_Class.String);
+                bool isString = (TokenStream[InputPointer].token_type == Token_Class.STRING);
 
                 if (isInteger || isFloat || isString)
                 {
@@ -865,7 +865,7 @@ namespace TINY_Compiler
             Node function_body = new Node("function_body");
             function_body.Children.Add(match(Token_Class.LBrace));
             function_body.Children.Add(Statements());
-            function_body.Children.Add(Return_Statement());
+            //function_body.Children.Add(Return_Statement());
             function_body.Children.Add(match(Token_Class.RBrace));
             return function_body;
  
