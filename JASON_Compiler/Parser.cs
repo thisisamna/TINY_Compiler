@@ -522,8 +522,7 @@ namespace TINY_Compiler
 
 
 
-        private Node Write_Statement() //statement 
-        {
+        private Node Write_Statement()         {
             //wt_stmt → Write W
             Node wt_stmt = new Node("Write_Statement");
 
@@ -623,7 +622,7 @@ namespace TINY_Compiler
         }
         private Node Rep_Stmt() //statement
         {
-            //Rep_Stmt  -> repeat  Statements until  Cond_Stmt
+            //Rep_Stmt  → repeat  Statements until  Cond_Stmt
             Node rep_Stmt = new Node("Rep_Stmt");
             rep_Stmt.Children.Add(match(Token_Class.REPEAT));
             rep_Stmt.Children.Add(Statements());
@@ -633,7 +632,7 @@ namespace TINY_Compiler
         }
         private Node Function_Call()
         {
-            //Fun_call -> Identifier (  args  )
+            //Fun_call → Identifier (  args  )
             Node function_Call = new Node("Function_Call");
             function_Call.Children.Add(match(Token_Class.Identifier));
             function_Call.Children.Add(match(Token_Class.LParanthesis));
@@ -767,13 +766,13 @@ namespace TINY_Compiler
 
         private Node Ass_Stmt() //assignment statement
         {
-            //ass_stmt →  Identifier  :=  experssion
+            //ass_stmt →  Identifier  :=  Experssion
             Node ass_stmt = new Node("Ass_Stmt");
            
             ass_stmt.Children.Add(match(Token_Class.Identifier));
             ass_stmt.Children.Add(match(Token_Class.AssignmentOp));
             ass_stmt.Children.Add(Experssion());
-          
+            //ass_stmt.Children.Add(match(Token_Class.Semicolon)); //question1
             return ass_stmt;
         }
 
