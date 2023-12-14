@@ -86,7 +86,7 @@ namespace TINY_Compiler
             this.TokenStream = TokenStream;
             //Must be edited must find main in our code or not ?!
             root = new Node("Main_Function");
-            root.Children.Add(Main_Function());
+            root.Children.Add(Program());
             return root;
         }
 
