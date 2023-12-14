@@ -674,9 +674,16 @@ namespace TINY_Compiler
             Node args_var = new Node("args");
             if (InputPointer < TokenStream.Count)
             {
+                //question: i added the number token here is it ok? هل كمان ممكن تاخذ فنكشن كول؟؟
                 if (TokenStream[InputPointer].token_type == Token_Class.Identifier)
                 {
                     args_var.Children.Add(match(Token_Class.Identifier));
+                    args_var.Children.Add(arg2());
+                    return args_var;
+                }
+                if(TokenStream[InputPointer].token_type == Token_Class.Number)
+                {
+                    args_var.Children.Add(match(Token_Class.Number));
                     args_var.Children.Add(arg2());
                     return args_var;
                 }
@@ -799,7 +806,6 @@ namespace TINY_Compiler
             ass_stmt.Children.Add(match(Token_Class.Identifier));
             ass_stmt.Children.Add(match(Token_Class.AssignmentOp));
             ass_stmt.Children.Add(Experssion());
-            //ass_stmt.Children.Add(match(Token_Class.Semicolon)); //question1
             return ass_stmt;
         }
 
