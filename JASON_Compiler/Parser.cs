@@ -929,7 +929,7 @@ namespace TINY_Compiler
             if_stat.Children.Add(Statements());
             if_stat.Children.Add(Else_if_stat());
             if_stat.Children.Add(Else_stat());
-            if_stat.Children.Add(match(Token_Class.ENDL));
+            if_stat.Children.Add(match(Token_Class.END));
 
 
             return if_stat;
@@ -947,7 +947,7 @@ namespace TINY_Compiler
             else_if_stat.Children.Add(Statements());
             else_if_stat.Children.Add(Else_if_stat());
             else_if_stat.Children.Add(Else_stat());
-            else_if_stat.Children.Add(match(Token_Class.ENDL));
+            else_if_stat.Children.Add(match(Token_Class.END));
 
 
             return else_if_stat;
@@ -962,7 +962,7 @@ namespace TINY_Compiler
 
             else_stat.Children.Add(match(Token_Class.ELSE));
             else_stat.Children.Add(Statements());
-            else_stat.Children.Add(match(Token_Class.ENDL));
+            else_stat.Children.Add(match(Token_Class.END));
 
             return else_stat;
            
