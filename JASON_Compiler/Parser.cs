@@ -151,7 +151,7 @@ namespace TINY_Compiler
             return condi;
 
         }
-        private Node Term() //still not done yet
+        private Node Term() 
         {
             //Term → number | identifier | function_call
             Node term = new Node("Term");
@@ -217,9 +217,18 @@ namespace TINY_Compiler
             {
                 if (TokenStream[InputPointer].token_type == Token_Class.INTEGER || TokenStream[InputPointer].token_type == Token_Class.FLOAT || TokenStream[InputPointer].token_type == Token_Class.STRING)
                 {
-                    Fun_stmts_var.Children.Add(Function_Statement());
-                    Fun_stmts_var.Children.Add(Fun_stmts());
-                    return Fun_stmts_var;
+                    ++InputPointer;
+                    if (InputPointer < TokenStream.Count)
+                    {
+                        if (TokenStream[InputPointer].token_type != Token_Class.MAIN) //if it is not main
+                        {
+                            --InputPointer;
+                            Fun_stmts_var.Children.Add(Function_Statement());
+                            Fun_stmts_var.Children.Add(Fun_stmts());
+                            return Fun_stmts_var;
+                        }
+                    }
+                    --InputPointer;
                 }
                 else
                 {
@@ -280,7 +289,8 @@ namespace TINY_Compiler
                 bool isString = (TokenStream[InputPointer].token_type == Token_Class.String);
                 bool isRead = (TokenStream[InputPointer].token_type == Token_Class.READ);
                 bool isWrite = (TokenStream[InputPointer].token_type == Token_Class.WRITE);
-                bool isReturn = (TokenStream[InputPointer].token_type == Token_Class.RETURN);
+                bool isReturn = false;
+               // bool isReturn = (TokenStream[InputPointer].token_type == Token_Class.RETURN);
                 bool isRepeat = (TokenStream[InputPointer].token_type == Token_Class.REPEAT);
                 bool isIf = (TokenStream[InputPointer].token_type == Token_Class.IF);
                 bool isElseIf = (TokenStream[InputPointer].token_type == Token_Class.ELSEIF);
@@ -356,11 +366,11 @@ namespace TINY_Compiler
                     statement.Children.Add(Write_Statement());
                     return statement;
                 }
-                if (TokenStream[InputPointer].token_type == Token_Class.RETURN)
-                {
-                    statement.Children.Add(Return_Statement());
-                    return statement;
-                }
+                //if (TokenStream[InputPointer].token_type == Token_Class.RETURN)
+                //{
+                //    statement.Children.Add(Return_Statement());
+                //    return statement;
+                //}
                 if (TokenStream[InputPointer].token_type == Token_Class.REPEAT)
                 {
                     statement.Children.Add(Rep_Stmt());
@@ -526,7 +536,7 @@ namespace TINY_Compiler
 
         private Node W() 
         {
-            //W→ Expression; | endl
+            //W → Expression; | endl;
             
             Node w = new Node("W");
   
@@ -555,7 +565,7 @@ namespace TINY_Compiler
         }
         private Node Cond_Stmt()
         {
-            //Cond_Stmt -> cond cond_stmt2
+            //Cond_Stmt → cond cond_stmt2
             Node cond_stmt = new Node("Cond_Stmt");
             cond_stmt.Children.Add(Condition());
             cond_stmt.Children.Add(Cond_Stmt2());
@@ -564,7 +574,7 @@ namespace TINY_Compiler
 
         private Node Cond_Stmt2()
         {
-            //Cond_Stmt2 -> Bool_Cond Cond_Stmt2 | e
+            //Cond_Stmt2 → Bool_Cond Cond_Stmt2 | e
             Node cond_stmt2 = new Node("cond_stmt2");
             if (InputPointer < TokenStream.Count)
             {
@@ -584,7 +594,7 @@ namespace TINY_Compiler
 
         private Node Bool_Cond()
         {
-            //Bool_Cond -> Bool_Op Cond
+            //Bool_Cond → Bool_Op Cond
             Node bool_Cond = new Node("Bool_Cond");
             bool_Cond.Children.Add(Bool_Op());
             bool_Cond.Children.Add(Condition());
@@ -593,7 +603,7 @@ namespace TINY_Compiler
 
         private Node Bool_Op()
         {
-            //Bool_Op -> && | "||"
+            //Bool_Op → && | "||"
             Node bool_Op = new Node("Bool_Op");
             if (InputPointer < TokenStream.Count)
             {
@@ -606,10 +616,6 @@ namespace TINY_Compiler
                 {
                     bool_Op.Children.Add(match(Token_Class.OrOp));
                     return bool_Op;
-                }
-                else
-                {
-                    //add to errors list?
                 }
             }
                 
@@ -638,7 +644,7 @@ namespace TINY_Compiler
 
         private Node args()
         {
-            //args -> Identifier  args2  |   𝜀
+            //args → Identifier  args2  |  𝜀
             Node args_var = new Node("args");
             if (InputPointer < TokenStream.Count)
             {
@@ -658,7 +664,7 @@ namespace TINY_Compiler
 
         private Node arg2()
         {
-            //args2 ->   “,”  Identifier  args2  |   𝜀
+            //args2 →   , Identifier  args2  |   𝜀
             Node args2_var = new Node("args2");
             if (InputPointer < TokenStream.Count)
             {
@@ -691,13 +697,11 @@ namespace TINY_Compiler
         private Node Identifiers()//Declaration_Statement non_terminal 
         {
             //Identifiers → Assignment_Statement Iden2 | Identifier Iden2
+
             //Identifiers → Iden3 Iden2
             //Iden3 → Identifier  | Assignment_Statement
             Node Identifiers_var = new Node("Identifiers");
-            //Identifiers_var.Children.Add(match(Token_Class.Identifier));
-
             Identifiers_var.Children.Add(Iden3());
-            //Identifiers_var.Children.Add(match(Token_Class.AssignmentOp));
             Identifiers_var.Children.Add(Iden2());
             return Identifiers_var;
    
@@ -755,7 +759,7 @@ namespace TINY_Compiler
                 }
                 
             }
-            return null;
+            return Iden3;
 
         }
 
