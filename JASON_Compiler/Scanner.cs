@@ -13,7 +13,7 @@ public enum Token_Class
 { //reserved words 
     INTEGER,FLOAT, STRING ,READ , 
     WRITE , REPEAT , UNTIL , IF , 
-    ELSEIF , ELSE , THEN , RETURN ,ENDL, MAIN, END
+    ELSEIF , ELSE , THEN , RETURN ,ENDL, MAIN, END,
     //Arithmetic operator 
     PlusOp, MinusOp, MultiplyOp, DivideOp,
     //Assignment operator :=  and Semicolon ;

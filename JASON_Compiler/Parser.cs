@@ -891,7 +891,7 @@ namespace TINY_Compiler
             Node function_body = new Node("function_body");
             function_body.Children.Add(match(Token_Class.LBrace));
             function_body.Children.Add(Statements());
-            //function_body.Children.Add(Return_Statement());
+            function_body.Children.Add(Return_Statement());
             function_body.Children.Add(match(Token_Class.RBrace));
             return function_body;
  
