@@ -291,13 +291,13 @@ namespace TINY_Compiler
                 bool isWrite = (TokenStream[InputPointer].token_type == Token_Class.WRITE);
                 bool isRepeat = (TokenStream[InputPointer].token_type == Token_Class.REPEAT);
                 bool isIf = (TokenStream[InputPointer].token_type == Token_Class.IF);
-                bool isElseIf = (TokenStream[InputPointer].token_type == Token_Class.ELSEIF);
-                bool isElse = (TokenStream[InputPointer].token_type == Token_Class.ELSE);
+                //bool isElseIf = (TokenStream[InputPointer].token_type == Token_Class.ELSEIF);
+                //bool isElse = (TokenStream[InputPointer].token_type == Token_Class.ELSE);
                 bool isIdentifier = (TokenStream[InputPointer].token_type == Token_Class.Identifier);
 
 
                 bool isStatement = isInteger || isFloat || isString || isRead || isWrite  ||
-                                    isRepeat || isIf || isElseIf || isElse || isIdentifier;
+                                    isRepeat || isIf  || isIdentifier;
 
 
                 if (isStatement)
@@ -800,6 +800,8 @@ namespace TINY_Compiler
             ass_stmt.Children.Add(match(Token_Class.Identifier));
             ass_stmt.Children.Add(match(Token_Class.AssignmentOp));
             ass_stmt.Children.Add(Experssion());
+            ass_stmt.Children.Add(match(Token_Class.Semicolon));
+
             return ass_stmt;
         }
 
@@ -921,8 +923,15 @@ namespace TINY_Compiler
             if_stat.Children.Add(Cond_Stmt());
             if_stat.Children.Add(match(Token_Class.THEN));
             if_stat.Children.Add(Statements());
-            if_stat.Children.Add(Else_if_stat());
-            if_stat.Children.Add(Else_stat());
+            while (true)
+            {
+                if (TokenStream[InputPointer].token_type == Token_Class.ELSEIF)
+                    if_stat.Children.Add(Else_if_stat());
+                else 
+                    break;
+            }
+            if (TokenStream[InputPointer].token_type == Token_Class.ELSE)
+                if_stat.Children.Add(Else_stat());
             if_stat.Children.Add(match(Token_Class.END));
 
 
@@ -939,9 +948,9 @@ namespace TINY_Compiler
             else_if_stat.Children.Add(Cond_Stmt());
             else_if_stat.Children.Add(match(Token_Class.THEN));
             else_if_stat.Children.Add(Statements());
-            else_if_stat.Children.Add(Else_if_stat());
-            else_if_stat.Children.Add(Else_stat());
-            else_if_stat.Children.Add(match(Token_Class.END));
+            //else_if_stat.Children.Add(Else_if_stat());
+            //else_if_stat.Children.Add(Else_stat());
+            //else_if_stat.Children.Add(match(Token_Class.END));
 
 
             return else_if_stat;
@@ -956,7 +965,7 @@ namespace TINY_Compiler
 
             else_stat.Children.Add(match(Token_Class.ELSE));
             else_stat.Children.Add(Statements());
-            else_stat.Children.Add(match(Token_Class.END));
+            //else_stat.Children.Add(match(Token_Class.END));
 
             return else_stat;
            
