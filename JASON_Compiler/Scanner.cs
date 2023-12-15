@@ -13,7 +13,7 @@ public enum Token_Class
 { //reserved words 
     INTEGER,FLOAT, STRING ,READ , 
     WRITE , REPEAT , UNTIL , IF , 
-    ELSEIF , ELSE , THEN , RETURN ,ENDL, MAIN,
+    ELSEIF , ELSE , THEN , RETURN ,ENDL, MAIN, END
     //Arithmetic operator 
     PlusOp, MinusOp, MultiplyOp, DivideOp,
     //Assignment operator :=  and Semicolon ;
@@ -57,7 +57,7 @@ namespace TINY_Compiler
         {
             /*
             Reserved_Keywords: int | float | string | read | write | repeat | until |
-            if | elseif | else | then | return | endl
+            if | elseif | else | then | return | endl |end
              */
             ReservedWords.Add("int", Token_Class.INTEGER);
             ReservedWords.Add("float", Token_Class.FLOAT);
@@ -72,6 +72,7 @@ namespace TINY_Compiler
             ReservedWords.Add("then", Token_Class.THEN);
             ReservedWords.Add("return", Token_Class.RETURN);
             ReservedWords.Add("endl", Token_Class.ENDL);
+            ReservedWords.Add("end", Token_Class.END);
             ReservedWords.Add("main", Token_Class.MAIN);
             /*
              arithmetic operation(+ | - | * | / )
