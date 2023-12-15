@@ -280,7 +280,6 @@ namespace TINY_Compiler
                 bool isString = (TokenStream[InputPointer].token_type == Token_Class.String);
                 bool isRead = (TokenStream[InputPointer].token_type == Token_Class.READ);
                 bool isWrite = (TokenStream[InputPointer].token_type == Token_Class.WRITE);
-                bool isReturn = (TokenStream[InputPointer].token_type == Token_Class.RETURN);
                 bool isRepeat = (TokenStream[InputPointer].token_type == Token_Class.REPEAT);
                 bool isIf = (TokenStream[InputPointer].token_type == Token_Class.IF);
                 bool isElseIf = (TokenStream[InputPointer].token_type == Token_Class.ELSEIF);
@@ -288,7 +287,7 @@ namespace TINY_Compiler
                 bool isIdentifier = (TokenStream[InputPointer].token_type == Token_Class.Identifier);
 
 
-                bool isStatement = isInteger || isFloat || isString || isRead || isWrite || isReturn ||
+                bool isStatement = isInteger || isFloat || isString || isRead || isWrite  ||
                                     isRepeat || isIf || isElseIf || isElse || isIdentifier;
 
 
@@ -356,11 +355,7 @@ namespace TINY_Compiler
                     statement.Children.Add(Write_Statement());
                     return statement;
                 }
-                if (TokenStream[InputPointer].token_type == Token_Class.RETURN)
-                {
-                    statement.Children.Add(Return_Statement());
-                    return statement;
-                }
+
                 if (TokenStream[InputPointer].token_type == Token_Class.REPEAT)
                 {
                     statement.Children.Add(Rep_Stmt());
@@ -384,7 +379,7 @@ namespace TINY_Compiler
             }
 
 
-            return statement;
+            return statement ;
 
         }
 
