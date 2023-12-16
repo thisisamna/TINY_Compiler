@@ -100,6 +100,7 @@ namespace TINY_Compiler
             Main_Function_var.Children.Add(match(Token_Class.LParanthesis));
             Main_Function_var.Children.Add(match(Token_Class.RParanthesis));
             Main_Function_var.Children.Add(Function_Body());
+        
             return Main_Function_var;
 
         }
@@ -342,7 +343,7 @@ namespace TINY_Compiler
                         if (isAssignmentOp)
                         {
                             --InputPointer;
-                            statement.Children.Add(Ass_Stmt());
+                            statement.Children.Add(Alone_Ass_Stmt());
                             return statement;
                         }
                         if (isLessOp || isGreatOp || isEqualOp || isNotEqualOp)
@@ -723,17 +724,12 @@ namespace TINY_Compiler
 
         private Node Identifiers()//Declaration_Statement non_terminal 
         {
-            //Identifiers → Assignment_Statement Iden2 | Identifier Iden2
-
             //Identifiers → Iden3 Iden2
             //Iden3 → Identifier  | Assignment_Statement
             Node Identifiers_var = new Node("Identifiers");
             Identifiers_var.Children.Add(Iden3());
             Identifiers_var.Children.Add(Iden2());
             return Identifiers_var;
-   
-
-
         }
 
 
@@ -791,7 +787,7 @@ namespace TINY_Compiler
         }
 
 
-
+        //if it is in declartion int x := 3 , r , y;
         private Node Ass_Stmt() //assignment statement
         {
             //ass_stmt →  Identifier  :=  Experssion
@@ -800,11 +796,23 @@ namespace TINY_Compiler
             ass_stmt.Children.Add(match(Token_Class.Identifier));
             ass_stmt.Children.Add(match(Token_Class.AssignmentOp));
             ass_stmt.Children.Add(Experssion());
-            ass_stmt.Children.Add(match(Token_Class.Semicolon));
+          //  ass_stmt.Children.Add(match(Token_Class.Semicolon));
 
             return ass_stmt;
         }
+        //if it is alone in code c := 2;
+        private Node Alone_Ass_Stmt() //assignment statement
+        {
+            //ass_stmt →  Identifier  :=  Experssion
+            Node alone_Ass_Stmt = new Node(" Alone_Ass_Stmt");
 
+            alone_Ass_Stmt.Children.Add(match(Token_Class.Identifier));
+            alone_Ass_Stmt.Children.Add(match(Token_Class.AssignmentOp));
+            alone_Ass_Stmt.Children.Add(Experssion());
+            alone_Ass_Stmt.Children.Add(match(Token_Class.Semicolon));
+
+            return alone_Ass_Stmt;
+        }
 
         private Node Parameter() 
         {
