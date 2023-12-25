@@ -85,7 +85,7 @@ namespace TINY_Compiler
             this.InputPointer = 0;
             this.TokenStream = TokenStream;
             //Must be edited must find main in our code or not ?!
-            root = new Node("Main_Function");
+            root = new Node("Program");
             root.Children.Add(Program());
             return root;
         }
@@ -265,8 +265,6 @@ namespace TINY_Compiler
 
         }
 
-
-
         private Node Statements() //statements
         {
             //Statements  → Statement Statements2 
@@ -369,6 +367,12 @@ namespace TINY_Compiler
                 if (TokenStream[InputPointer].token_type == Token_Class.REPEAT)
                 {
                     statement.Children.Add(Rep_Stmt());
+                    return statement;
+                }
+                /*HERE*/
+                if (TokenStream[InputPointer].token_type == Token_Class.RETURN)
+                {
+                    statement.Children.Add(Return_Statement());
                     return statement;
                 }
                 if (TokenStream[InputPointer].token_type == Token_Class.IF)
