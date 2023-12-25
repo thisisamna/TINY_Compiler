@@ -905,6 +905,7 @@ namespace TINY_Compiler
         private Node Function_Body() 
         {
             //Function_Body → { Statements Ret_stmt }
+            noReturn = true;
 
             Node function_body = new Node("function_body");
             function_body.Children.Add(match(Token_Class.LBrace));
