@@ -9,6 +9,8 @@ using System.Windows.Forms;
 
 namespace TINY_Compiler
 {
+
+    
     public class Node
     {
         public List<Node> Children = new List<Node>();
@@ -21,6 +23,7 @@ namespace TINY_Compiler
     }
     public class Parser
     {
+        public bool noReturn = true;
         int InputPointer = 0;
         List<Token> TokenStream;
         public Node root;
@@ -372,6 +375,7 @@ namespace TINY_Compiler
                 /*HERE*/
                 if (TokenStream[InputPointer].token_type == Token_Class.RETURN)
                 {
+                    noReturn = false;
                     statement.Children.Add(Return_Statement());
                     return statement;
                 }
@@ -905,7 +909,11 @@ namespace TINY_Compiler
             Node function_body = new Node("function_body");
             function_body.Children.Add(match(Token_Class.LBrace));
             function_body.Children.Add(Statements());
-            function_body.Children.Add(Return_Statement());
+            if(noReturn)
+            {
+                function_body.Children.Add(Return_Statement());
+                noReturn = true;
+            }
             function_body.Children.Add(match(Token_Class.RBrace));
             return function_body;
  
